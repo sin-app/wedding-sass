@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { ReactNode, useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   Mail,
   Music,
@@ -19,6 +19,12 @@ import {
 import { useFormState, useFormStatus } from "react-dom";
 import type { InvitationData } from "@/lib/types";
 import type { Theme } from "@/templates/theme";
+import { TemplateFrame } from "@/templates/frames";
+import {
+  asTemplateSlug,
+  heroVariants,
+  revealVariants,
+} from "@/templates/animations";
 
 export type PublicActionResult = { ok: boolean; message: string };
 type FormAction = (
@@ -32,6 +38,7 @@ export interface RenderProps {
   guestName?: string;
   preview?: boolean;
   watermark?: boolean;
+  slug?: string;
   submitRsvp?: FormAction;
   submitWish?: FormAction;
   initialWishes?: { name: string; message: string }[];
@@ -39,13 +46,23 @@ export interface RenderProps {
 
 /* ───────────────── helpers ───────────────── */
 
-function Reveal({ children, delay = 0 }: { children: ReactNode; delay?: number }) {
+function Reveal({
+  children,
+  delay = 0,
+  slug = "classic",
+}: {
+  children: ReactNode;
+  delay?: number;
+  slug?: string;
+}) {
+  const reduce = useReducedMotion();
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={reduce ? "show" : "hidden"}
+      whileInView="show"
       viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.6, delay, ease: "easeOut" }}
+      variants={revealVariants[asTemplateSlug(slug)]}
+      transition={{ delay }}
     >
       {children}
     </motion.div>
@@ -149,10 +166,15 @@ export function BaseTemplate({
   guestName = "Tamu Undangan",
   preview = false,
   watermark = false,
+  slug = "classic",
   submitRsvp,
   submitWish,
   initialWishes = [],
 }: RenderProps) {
+  const tSlug = asTemplateSlug(slug);
+  const reduce = useReducedMotion();
+  const heroAnim = heroVariants[tSlug];
+
   const [opened, setOpened] = useState(preview);
   const [playing, setPlaying] = useState(false);
   const [lightbox, setLightbox] = useState<string | null>(null);
@@ -205,6 +227,7 @@ export function BaseTemplate({
       style={{ background: theme.bg, color: theme.text, fontFamily: theme.fontBody }}
       className={preview ? "relative" : "relative min-h-screen"}
     >
+      <TemplateFrame slug={tSlug} theme={theme} />
       {data.music.src && <audio ref={audioRef} src={data.music.src} loop preload="auto" />}
 
       {/* HERO */}
@@ -213,7 +236,25 @@ export function BaseTemplate({
         style={{ backgroundImage: `url(${data.hero.background})` }}
       >
         <div className="absolute inset-0" style={{ background: theme.heroOverlay }} />
-        <div className="relative z-10">
+        {tSlug === "luxury" && (
+          <motion.div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 z-10"
+            style={{
+              background:
+                "linear-gradient(120deg, transparent 30%, rgba(201,162,39,0.16) 50%, transparent 70%)",
+              backgroundSize: "220% 220%",
+            }}
+            animate={{ backgroundPositionX: ["0%", "220%"] }}
+            transition={{ duration: 7, repeat: Infinity, ease: "linear" }}
+          />
+        )}
+        <motion.div
+          className="relative z-10"
+          variants={heroAnim}
+          initial={reduce ? "show" : "hidden"}
+          animate="show"
+        >
           <p className="text-xs uppercase tracking-[0.3em] text-white/80">The Wedding Of</p>
           <h1
             className="mt-4 text-6xl md:text-8xl"
@@ -225,7 +266,7 @@ export function BaseTemplate({
           <div className="mt-10">
             <Countdown target={data.date} theme={theme} />
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* GREETING + COUPLE */}
@@ -599,8 +640,13 @@ export function BaseTemplate({
               transition={{ duration: 0.8 }}
             >
               <div className="absolute inset-0" style={{ background: theme.heroOverlay }} />
-              <div className="relative z-10">
-                <p className="text-xs uppercase tracking-[0.3em]">The Wedding Of</p>
+                <motion.div
+                  className="relative z-10"
+                  variants={heroAnim}
+                  initial={reduce ? "show" : "hidden"}
+                  animate="show"
+                >
+                  <p className="text-xs uppercase tracking-[0.3em]">The Wedding Of</p>
                 <h1
                   className="mt-4 text-5xl md:text-7xl"
                   style={{ fontFamily: theme.useScript ? theme.fontScript : theme.fontHeading }}
@@ -616,7 +662,7 @@ export function BaseTemplate({
                 >
                   <Mail className="h-4 w-4" /> Buka Undangan
                 </button>
-              </div>
+              </motion.div>
             </motion.div>
           )}
         </AnimatePresence>

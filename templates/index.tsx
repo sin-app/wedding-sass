@@ -30,5 +30,5 @@ export function TemplateRenderer({
   ...props
 }: Props & { slug: string }) {
   const Cmp = TEMPLATE_REGISTRY[slug] ?? ClassicTemplate;
-  return <Cmp {...props} />;
+  return <Cmp {...props} slug={slug} />;
 }
