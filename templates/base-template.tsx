@@ -391,6 +391,14 @@ export function BaseTemplate({
             <form action={rsvpAction} className="space-y-4">
               <input type="hidden" name="guest_name_default" value={guestName} />
               <input
+                type="text"
+                name="hp"
+                tabIndex={-1}
+                autoComplete="off"
+                className="absolute -left-[9999px] h-0 w-0 opacity-0"
+                aria-hidden="true"
+              />
+              <input
                 name="name"
                 required
                 placeholder="Nama"
@@ -448,6 +456,14 @@ export function BaseTemplate({
           <SectionTitle overline="Doa & Ucapan" title="Ucapan" theme={theme} />
           {submitWish ? (
             <form action={wishAction} className="space-y-3">
+              <input
+                type="text"
+                name="hp"
+                tabIndex={-1}
+                autoComplete="off"
+                className="absolute -left-[9999px] h-0 w-0 opacity-0"
+                aria-hidden="true"
+              />
               <input
                 name="name"
                 required

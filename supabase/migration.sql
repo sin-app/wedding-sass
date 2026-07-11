@@ -210,6 +210,15 @@ create policy "wishes owner delete" on public.wishes
               and (i.user_id = auth.uid() or public.is_admin()))
   );
 
+-- rsvps: pemilik/admin boleh hapus (moderasi spam)
+drop policy if exists "rsvps owner delete" on public.rsvps;
+create policy "rsvps owner delete" on public.rsvps
+  for delete using (
+    exists (select 1 from public.invitations i
+            where i.id = invitation_id
+              and (i.user_id = auth.uid() or public.is_admin()))
+  );
+
 -- =====================================================================
 -- Storage bucket (foto undangan)
 -- =====================================================================
@@ -229,6 +238,32 @@ create policy "inv storage update" on storage.objects
 drop policy if exists "inv storage delete" on storage.objects;
 create policy "inv storage delete" on storage.objects
   for delete to authenticated using (bucket_id = 'invitations');
+
+-- =====================================================================
+-- Batas jumlah undangan per paket (atomik, cegah race condition)
+-- Sinkron dengan config/plans.ts: free = 1, premium = 10
+-- =====================================================================
+create or replace function public.enforce_invitation_limit()
+returns trigger
+language plpgsql
+as $$
+declare
+  v_plan text;
+  v_max  int;
+begin
+  select plan into v_plan from public.subscriptions where user_id = new.user_id;
+  v_max := case coalesce(v_plan, 'free') when 'premium' then 10 else 1 end;
+  if (select count(*) from public.invitations where user_id = new.user_id) >= v_max then
+    raise exception 'Batas paket tercapai (%)', v_max;
+  end if;
+  return new;
+end;
+$$;
+
+drop trigger if exists trg_inv_limit on public.invitations;
+create trigger trg_inv_limit
+  before insert on public.invitations
+  for each row execute function public.enforce_invitation_limit();
 
 -- =====================================================================
 -- Seed templates

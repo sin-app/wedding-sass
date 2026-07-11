@@ -25,16 +25,16 @@ export async function generateMetadata({
   const { slug } = await params;
   const inv = await fetchInvitation(slug);
   if (!inv) return { title: "Undangan tidak ditemukan" };
-  const g = inv.data.couple.groom.shortName;
-  const b = inv.data.couple.bride.shortName;
+  const g = inv.data?.couple?.groom?.shortName ?? "Mempelai";
+  const b = inv.data?.couple?.bride?.shortName ?? "Pria";
   const title = `Undangan Pernikahan ${g} & ${b}`;
   return {
     title,
-    description: inv.data.greeting,
+    description: inv.data?.greeting ?? "",
     openGraph: {
       title,
-      description: inv.data.greeting,
-      images: inv.data.hero.background ? [inv.data.hero.background] : [],
+      description: inv.data?.greeting ?? "",
+      images: inv.data?.hero?.background ? [inv.data.hero.background] : [],
       type: "website",
     },
   };
@@ -55,7 +55,14 @@ export default async function PublicInvitation({
   const supabase = await createClient();
 
   // Tentukan nama tamu (dari token guest atau query ?to)
-  let guestName = sp.to ? decodeURIComponent(sp.to) : "Tamu Undangan";
+  let guestName = "Tamu Undangan";
+  if (sp.to) {
+    try {
+      guestName = decodeURIComponent(sp.to);
+    } catch {
+      guestName = "Tamu Undangan";
+    }
+  }
 
   if (sp.g) {
     const { data: guest } = await supabase

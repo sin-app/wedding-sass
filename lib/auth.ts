@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { cache } from "react";
 import { createClient } from "@/lib/supabase/server";
 import type { Profile, Subscription } from "@/lib/types";
 
@@ -10,7 +11,7 @@ export async function getUser() {
   return user;
 }
 
-export async function getSessionData() {
+export const getSessionData = cache(async () => {
   const supabase = await createClient();
   const {
     data: { user },
@@ -27,7 +28,7 @@ export async function getSessionData() {
     profile: profile as Profile | null,
     subscription: subscription as Subscription | null,
   };
-}
+});
 
 export async function requireUser() {
   const data = await getSessionData();

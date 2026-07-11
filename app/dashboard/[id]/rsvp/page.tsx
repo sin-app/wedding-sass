@@ -49,18 +49,21 @@ export default async function RsvpRecapPage({
   if (!inv) notFound();
   const invitation = inv as Invitation;
 
+  const RECAP_LIMIT = 1000;
   const [{ data: rsvps }, { data: wishes }, { count: guestCount }, { count: openedCount }] =
     await Promise.all([
       supabase
         .from("rsvps")
         .select("*")
         .eq("invitation_id", invitation.id)
-        .order("created_at", { ascending: false }),
+        .order("created_at", { ascending: false })
+        .limit(RECAP_LIMIT),
       supabase
         .from("wishes")
         .select("*")
         .eq("invitation_id", invitation.id)
-        .order("created_at", { ascending: false }),
+        .order("created_at", { ascending: false })
+        .limit(RECAP_LIMIT),
       supabase
         .from("guests")
         .select("*", { count: "exact", head: true })
