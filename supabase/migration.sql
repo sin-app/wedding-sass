@@ -266,6 +266,19 @@ create trigger trg_inv_limit
   for each row execute function public.enforce_invitation_limit();
 
 -- =====================================================================
+-- Rate limiting (server-side, per IP) untuk form publik
+-- Dikelola via service role; tidak perlu RLS.
+-- =====================================================================
+create table if not exists public.rate_limits (
+  id bigserial primary key,
+  ip text not null,
+  action text not null,
+  created_at timestamptz default now()
+);
+create index if not exists idx_rate_limits_ip_action_time
+  on public.rate_limits (ip, action, created_at);
+
+-- =====================================================================
 -- Seed templates
 -- =====================================================================
 insert into public.templates (slug, name, thumbnail, premium) values

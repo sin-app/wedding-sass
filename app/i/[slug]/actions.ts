@@ -1,41 +1,40 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { getClientIp, isRateLimited } from "@/lib/rate-limit";
+import { parseRsvp, parseWish } from "@/lib/validators";
 
 export type PublicActionResult = { ok: boolean; message: string };
 
-const NAME_MAX = 80;
-const MESSAGE_MAX = 500;
-const GUEST_COUNT_MAX = 10;
+const RATE_LIMIT = 5; // maks submit per IP per 10 menit
+const RATE_MSG = "Terlalu banyak permintaan. Coba lagi beberapa menit lagi.";
+
+function isBot(formData: FormData): boolean {
+  // Honeypot: field tersembunyi yang diisi bot akan menolak diam-diam.
+  return String(formData.get("hp") || "").trim().length > 0;
+}
 
 export async function submitRsvp(
   invitationId: string,
   _prev: PublicActionResult | null,
   formData: FormData
 ): Promise<PublicActionResult> {
-  // Honeypot: bot yang mengisi field tersembunyi ini akan ditolak diam-diam.
-  if (String(formData.get("hp") || "").trim()) return { ok: false, message: "" };
+  if (isBot(formData)) return { ok: false, message: "" };
 
-  const name = String(formData.get("name") || "").trim().slice(0, NAME_MAX);
-  const attendance = String(formData.get("attendance") || "");
-  const rawCount = Number(formData.get("guest_count") || 1);
-  const guest_count = Math.min(
-    Math.max(Number.isFinite(rawCount) ? rawCount : 1, 1),
-    GUEST_COUNT_MAX
-  );
-  const message = String(formData.get("message") || "").trim().slice(0, MESSAGE_MAX);
+  const ip = await getClientIp();
+  if (await isRateLimited(ip, "rsvp", RATE_LIMIT))
+    return { ok: false, message: RATE_MSG };
 
-  if (!name) return { ok: false, message: "Nama wajib diisi." };
-  if (!["hadir", "tidak", "ragu"].includes(attendance))
-    return { ok: false, message: "Pilih status kehadiran." };
+  const parsed = parseRsvp(formData);
+  if (!parsed.ok) return { ok: false, message: parsed.error };
 
   const supabase = await createClient();
   const { error } = await supabase.from("rsvps").insert({
     invitation_id: invitationId,
-    name,
-    attendance,
-    guest_count,
-    message: message || null,
+    name: parsed.value.name,
+    attendance: parsed.value.attendance,
+    guest_count: parsed.value.guest_count,
+    message: parsed.value.message,
   });
 
   if (error) return { ok: false, message: "Gagal menyimpan. Coba lagi." };
@@ -47,19 +46,20 @@ export async function submitWish(
   _prev: PublicActionResult | null,
   formData: FormData
 ): Promise<PublicActionResult> {
-  if (String(formData.get("hp") || "").trim()) return { ok: false, message: "" };
+  if (isBot(formData)) return { ok: false, message: "" };
 
-  const name = String(formData.get("name") || "").trim().slice(0, NAME_MAX);
-  const message = String(formData.get("message") || "").trim().slice(0, MESSAGE_MAX);
+  const ip = await getClientIp();
+  if (await isRateLimited(ip, "wish", RATE_LIMIT))
+    return { ok: false, message: RATE_MSG };
 
-  if (!name || !message)
-    return { ok: false, message: "Nama dan ucapan wajib diisi." };
+  const parsed = parseWish(formData);
+  if (!parsed.ok) return { ok: false, message: parsed.error };
 
   const supabase = await createClient();
   const { error } = await supabase.from("wishes").insert({
     invitation_id: invitationId,
-    name,
-    message,
+    name: parsed.value.name,
+    message: parsed.value.message,
   });
 
   if (error) return { ok: false, message: "Gagal mengirim ucapan." };
