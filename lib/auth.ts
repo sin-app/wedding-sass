@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import type { Profile, Subscription } from "@/lib/types";
 
 export async function getUser() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -11,7 +11,7 @@ export async function getUser() {
 }
 
 export async function getSessionData() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();

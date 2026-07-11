@@ -7,7 +7,7 @@ import { submitRsvp, submitWish } from "./actions";
 import type { Invitation, TemplateRow } from "@/lib/types";
 
 async function fetchInvitation(slug: string) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data } = await supabase
     .from("invitations")
     .select("*")
@@ -20,9 +20,10 @@ async function fetchInvitation(slug: string) {
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const inv = await fetchInvitation(params.slug);
+  const { slug } = await params;
+  const inv = await fetchInvitation(slug);
   if (!inv) return { title: "Undangan tidak ditemukan" };
   const g = inv.data.couple.groom.shortName;
   const b = inv.data.couple.bride.shortName;
@@ -43,25 +44,25 @@ export default async function PublicInvitation({
   params,
   searchParams,
 }: {
-  params: { slug: string };
-  searchParams: { to?: string; g?: string };
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ to?: string; g?: string }>;
 }) {
-  const invitation = await fetchInvitation(params.slug);
+  const { slug } = await params;
+  const sp = await searchParams;
+  const invitation = await fetchInvitation(slug);
   if (!invitation) notFound();
 
-  const supabase = createClient();
+  const supabase = await createClient();
 
   // Tentukan nama tamu (dari token guest atau query ?to)
-  let guestName = searchParams.to
-    ? decodeURIComponent(searchParams.to)
-    : "Tamu Undangan";
+  let guestName = sp.to ? decodeURIComponent(sp.to) : "Tamu Undangan";
 
-  if (searchParams.g) {
+  if (sp.g) {
     const { data: guest } = await supabase
       .from("guests")
       .select("id, name")
       .eq("invitation_id", invitation.id)
-      .eq("token", searchParams.g)
+      .eq("token", sp.g)
       .single();
     if (guest) {
       guestName = guest.name;

@@ -15,7 +15,7 @@ export async function createInvitation(templateSlug: string): Promise<Result> {
   const session = await getSessionData();
   if (!session?.user) return { ok: false, message: "Tidak diizinkan." };
 
-  const supabase = createClient();
+  const supabase = await createClient();
   const plan = session.subscription?.plan ?? "free";
   const limits = getLimits(plan);
 
@@ -71,7 +71,7 @@ export async function saveInvitation(
   const session = await getSessionData();
   if (!session?.user) return { ok: false, message: "Tidak diizinkan." };
 
-  const supabase = createClient();
+  const supabase = await createClient();
   const cleanSlug = slugify(payload.slug) || `undangan-${randomToken(5)}`;
 
   const { error } = await supabase
@@ -103,7 +103,7 @@ export async function setPublishStatus(
       return { ok: false, message: "Langganan tidak aktif." };
   }
 
-  const supabase = createClient();
+  const supabase = await createClient();
   const { error } = await supabase
     .from("invitations")
     .update({ status: publish ? "published" : "draft" })
@@ -119,7 +119,7 @@ export async function deleteInvitation(id: string): Promise<Result> {
   const session = await getSessionData();
   if (!session?.user) return { ok: false, message: "Tidak diizinkan." };
 
-  const supabase = createClient();
+  const supabase = await createClient();
   const { error } = await supabase
     .from("invitations")
     .delete()

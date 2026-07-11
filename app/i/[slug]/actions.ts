@@ -18,7 +18,7 @@ export async function submitRsvp(
   if (!["hadir", "tidak", "ragu"].includes(attendance))
     return { ok: false, message: "Pilih status kehadiran." };
 
-  const supabase = createClient();
+  const supabase = await createClient();
   const { error } = await supabase.from("rsvps").insert({
     invitation_id: invitationId,
     name,
@@ -42,7 +42,7 @@ export async function submitWish(
   if (!name || !message)
     return { ok: false, message: "Nama dan ucapan wajib diisi." };
 
-  const supabase = createClient();
+  const supabase = await createClient();
   const { error } = await supabase.from("wishes").insert({
     invitation_id: invitationId,
     name,

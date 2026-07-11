@@ -11,7 +11,7 @@ export type Result = { ok: boolean; message?: string };
 async function assertOwner(invitationId: string) {
   const session = await getSessionData();
   if (!session?.user) return null;
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data } = await supabase
     .from("invitations")
     .select("id, user_id")

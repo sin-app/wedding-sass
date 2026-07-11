@@ -11,7 +11,7 @@ import type { Invitation, TemplateRow } from "@/lib/types";
 
 export default async function DashboardHome() {
   const { user, subscription } = await requireUser();
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const { data: invitations } = await supabase
     .from("invitations")

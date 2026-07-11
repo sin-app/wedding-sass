@@ -10,15 +10,16 @@ import type { Guest, Invitation } from "@/lib/types";
 export default async function GuestsPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
+  const { id } = await params;
   const { user, subscription } = await requireUser();
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const { data: inv } = await supabase
     .from("invitations")
     .select("*")
-    .eq("id", params.id)
+    .eq("id", id)
     .eq("user_id", user.id)
     .single();
   if (!inv) notFound();

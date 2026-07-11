@@ -14,7 +14,7 @@ export async function login(
   const password = String(formData.get("password") || "");
   const next = String(formData.get("next") || "/dashboard");
 
-  const supabase = createClient();
+  const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) return { error: "Email atau password salah." };
 
@@ -33,7 +33,7 @@ export async function register(
   if (password.length < 6)
     return { error: "Password minimal 6 karakter." };
 
-  const supabase = createClient();
+  const supabase = await createClient();
   const { error } = await supabase.auth.signUp({
     email,
     password,
@@ -46,7 +46,7 @@ export async function register(
 }
 
 export async function logout() {
-  const supabase = createClient();
+  const supabase = await createClient();
   await supabase.auth.signOut();
   revalidatePath("/", "layout");
   redirect("/login");
