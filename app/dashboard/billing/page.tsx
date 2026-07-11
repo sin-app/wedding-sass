@@ -66,7 +66,8 @@ export default async function BillingPage() {
               <p className="font-medium">Cara upgrade (aktivasi manual):</p>
               <ol className="mt-2 list-decimal space-y-1 pl-5 text-muted-foreground">
                 <li>
-                  Transfer {premium.price} ke <b>BCA 1234567890</b> a.n. WeddingKu.
+                  Transfer {premium.price} ke <b>SeaBank 901526904190</b> a.n.
+                  Muhamad Akbar Sinyo.
                 </li>
                 <li>Klik tombol di bawah untuk meminta aktivasi.</li>
                 <li>Admin memverifikasi & mengaktifkan paket Premium Anda.</li>
