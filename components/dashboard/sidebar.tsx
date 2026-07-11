@@ -73,7 +73,7 @@ export function Sidebar({
         )}
       </nav>
 
-      <div className="mt-auto hidden border-t border-border p-4 md:block">
+      <div className="border-t border-border p-4 md:mt-auto">
         <p className="text-sm font-medium">{userName}</p>
         <Badge variant={planLabel === "Premium" ? "default" : "secondary"} className="mt-1">
           {planLabel}

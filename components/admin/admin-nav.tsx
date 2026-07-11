@@ -51,7 +51,7 @@ export function AdminNav() {
           );
         })}
       </nav>
-      <div className="mt-auto hidden space-y-2 border-t border-border p-4 md:block">
+      <div className="space-y-2 border-t border-border p-4 md:mt-auto">
         <Link
           href="/dashboard"
           className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
