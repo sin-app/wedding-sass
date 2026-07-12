@@ -23,6 +23,13 @@ import { useFormState, useFormStatus } from "react-dom";
 import type { InvitationData } from "@/lib/types";
 import type { Theme } from "@/templates/theme";
 import { TemplateFrame, FrameCard } from "@/templates/frames";
+
+function extractYouTubeId(url: string): string | null {
+  const m = url.match(
+    /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/|live\/)|youtu\.be\/)([\w-]{11})/
+  );
+  return m ? m[1] : null;
+}
 import {
   BotanicalBackground,
   FloralDivider,
@@ -224,6 +231,17 @@ export function BaseTemplate({
   const [playing, setPlaying] = useState(false);
   const [lightbox, setLightbox] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const ytRef = useRef<HTMLIFrameElement | null>(null);
+  const ytId = extractYouTubeId(data.music.src);
+  const isYt = ytId !== null;
+
+  const playYoutube = (on: boolean) => {
+    const el = ytRef.current;
+    if (!el || !ytId) return;
+    el.src = on
+      ? `https://www.youtube.com/embed/${ytId}?autoplay=1&loop=1&playlist=${ytId}&controls=0&modestbranding=1`
+      : "about:blank";
+  };
 
   useEffect(() => {
     if (preview) return;
@@ -251,10 +269,17 @@ export function BaseTemplate({
 
   const openIt = () => {
     setOpened(true);
-    audioRef.current?.play().then(() => setPlaying(true)).catch(() => {});
+    if (isYt) playYoutube(true);
+    else audioRef.current?.play().then(() => setPlaying(true)).catch(() => {});
     window.scrollTo({ top: 0 });
   };
   const toggleMusic = () => {
+    if (isYt) {
+      const next = !playing;
+      playYoutube(next);
+      setPlaying(next);
+      return;
+    }
     const a = audioRef.current;
     if (!a) return;
     if (playing) {
@@ -278,7 +303,19 @@ export function BaseTemplate({
       <Petal theme={theme} delay={4} left="38%" />
       <Petal theme={theme} delay={8} left="64%" />
       <Petal theme={theme} delay={11} left="86%" />
-      {data.music.src && <audio ref={audioRef} src={data.music.src} loop preload="auto" />}
+      {isYt ? (
+        <iframe
+          ref={ytRef}
+          title="Musik latar"
+          aria-hidden
+          tabIndex={-1}
+          className="pointer-events-none absolute -left-[9999px] h-0 w-0 opacity-0"
+        />
+      ) : (
+        data.music.src && (
+          <audio ref={audioRef} src={data.music.src} loop preload="auto" />
+        )
+      )}
 
       {/* HERO */}
       <section

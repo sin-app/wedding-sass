@@ -157,12 +157,16 @@ export function FrameCard({
   const s = asTemplateSlug(slug);
   const cfg = FRAME_CONFIG[s];
   const color = theme.primary;
+  const elevation = "0 10px 30px -12px rgba(0,0,0,0.22)";
   const style: CSSProperties = {
     borderColor: color,
     borderWidth: cfg.border === "double" ? 1 : Math.max(1, cfg.width - 1),
     borderStyle: cfg.border === "double" ? "solid" : cfg.border,
     background: theme.surface,
-    boxShadow: cfg.border === "double" ? `inset 0 0 0 3px ${color}22` : undefined,
+    boxShadow:
+      cfg.border === "double"
+        ? `inset 0 0 0 3px ${color}22, ${elevation}`
+        : elevation,
   };
   return (
     <div className={`relative border ${cfg.radius} ${className}`} style={style}>
