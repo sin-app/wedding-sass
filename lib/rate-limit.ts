@@ -6,9 +6,18 @@ const MAX_AGE_MS = 24 * 60 * 60 * 1000; // simpan maks 1 hari
 
 export async function getClientIp(): Promise<string> {
   const h = await headers();
+  // x-real-ip is set by Vercel's edge and cannot be spoofed by the client.
+  const real = h.get("x-real-ip");
+  if (real) return real.trim();
+  // x-forwarded-for may be client-supplied and appended by proxies, so the
+  // trustworthy client IP is the LAST entry — never the first.
   const xff = h.get("x-forwarded-for");
-  if (xff) return xff.split(",")[0].trim();
-  return h.get("x-real-ip") || "unknown";
+  if (xff) {
+    const parts = xff.split(",").map((p) => p.trim()).filter(Boolean);
+    const last = parts[parts.length - 1];
+    if (last) return last;
+  }
+  return "unknown";
 }
 
 /**

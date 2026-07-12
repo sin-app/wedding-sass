@@ -6,13 +6,19 @@ import { createClient } from "@/lib/supabase/server";
 
 export type AuthState = { error?: string } | null;
 
+// Hanya izinkan redirect ke path lokal agar tidak terjadi open redirect.
+function safeRedirect(input: string): string {
+  if (input.startsWith("/") && !input.startsWith("//")) return input;
+  return "/dashboard";
+}
+
 export async function login(
   _prev: AuthState,
   formData: FormData
 ): Promise<AuthState> {
   const email = String(formData.get("email") || "").trim();
   const password = String(formData.get("password") || "");
-  const next = String(formData.get("next") || "/dashboard");
+  const next = safeRedirect(String(formData.get("next") || "/dashboard"));
 
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password });

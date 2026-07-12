@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { cache } from "react";
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -6,7 +7,7 @@ import { TemplateRenderer } from "@/templates";
 import { submitRsvp, submitWish } from "./actions";
 import type { Invitation, TemplateRow } from "@/lib/types";
 
-async function fetchInvitation(slug: string) {
+const fetchInvitation = cache(async (slug: string) => {
   const supabase = await createClient();
   const { data } = await supabase
     .from("invitations")
@@ -15,7 +16,7 @@ async function fetchInvitation(slug: string) {
     .eq("status", "published")
     .single();
   return data as Invitation | null;
-}
+});
 
 export async function generateMetadata({
   params,
@@ -82,15 +83,19 @@ export default async function PublicInvitation({
   }
 
   // Hitung view + ambil ucapan
-  const [{ data: wishes }] = await Promise.all([
-    supabase
-      .from("wishes")
-      .select("name, message")
-      .eq("invitation_id", invitation.id)
-      .order("created_at", { ascending: false })
-      .limit(50),
-    supabase.rpc("increment_views", { inv_id: invitation.id }),
-  ]);
+  const wishesPromise = supabase
+    .from("wishes")
+    .select("name, message")
+    .eq("invitation_id", invitation.id)
+    .order("created_at", { ascending: false })
+    .limit(50);
+  // Penambahan view bersifat terbaik-effort: jangan gagalkan render bila gagal.
+  const viewsPromise = (async () => {
+    try {
+      await supabase.rpc("increment_views", { inv_id: invitation.id });
+    } catch {}
+  })();
+  const [{ data: wishes }] = await Promise.all([wishesPromise, viewsPromise]);
 
   const { data: tpl } = await supabase
     .from("templates")

@@ -14,6 +14,19 @@ function isBot(formData: FormData): boolean {
   return String(formData.get("hp") || "").trim().length > 0;
 }
 
+// Pastikan id undangan valid dan sudah dipublikasikan agar form publik
+// tidak bisa menyisipkan RSVP/ucapan ke undangan draft atau milik orang lain.
+async function isInvitationPublished(id: string): Promise<boolean> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("invitations")
+    .select("id")
+    .eq("id", id)
+    .eq("status", "published")
+    .maybeSingle();
+  return !!data;
+}
+
 export async function submitRsvp(
   invitationId: string,
   _prev: PublicActionResult | null,
@@ -27,6 +40,9 @@ export async function submitRsvp(
 
   const parsed = parseRsvp(formData);
   if (!parsed.ok) return { ok: false, message: parsed.error };
+
+  if (!(await isInvitationPublished(invitationId)))
+    return { ok: false, message: "Undangan tidak tersedia." };
 
   const supabase = await createClient();
   const { error } = await supabase.from("rsvps").insert({
@@ -54,6 +70,9 @@ export async function submitWish(
 
   const parsed = parseWish(formData);
   if (!parsed.ok) return { ok: false, message: parsed.error };
+
+  if (!(await isInvitationPublished(invitationId)))
+    return { ok: false, message: "Undangan tidak tersedia." };
 
   const supabase = await createClient();
   const { error } = await supabase.from("wishes").insert({
