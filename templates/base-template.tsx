@@ -22,7 +22,7 @@ import {
 import { useFormState, useFormStatus } from "react-dom";
 import type { InvitationData } from "@/lib/types";
 import type { Theme } from "@/templates/theme";
-import { TemplateFrame } from "@/templates/frames";
+import { TemplateFrame, FrameCard } from "@/templates/frames";
 import {
   BotanicalBackground,
   FloralDivider,
@@ -343,7 +343,10 @@ export function BaseTemplate({
                 )}
                 <Reveal delay={idx * 0.1}>
                   <div className="flex flex-col items-center text-center">
-                    <div className="relative h-52 w-52 overflow-hidden rounded-full border-4 border-white shadow-md">
+                    <div
+                      className="relative h-52 w-52 overflow-hidden rounded-full border-4 border-white shadow-md"
+                      style={{ boxShadow: `0 0 0 4px ${theme.primary}33, 0 4px 14px rgba(0,0,0,0.2)` }}
+                    >
                       <Image src={p.photo} alt={p.name} fill className="object-cover" sizes="208px" />
                     </div>
                     <h3 className="mt-6 text-2xl" style={{ fontFamily: theme.fontHeading }}>
@@ -379,7 +382,7 @@ export function BaseTemplate({
             <div className="space-y-8">
               {data.story.map((s, i) => (
                 <Reveal key={i} delay={i * 0.05}>
-                  <div className="rounded-xl p-5" style={{ background: theme.surface }}>
+                  <FrameCard slug={tSlug} theme={theme} className="p-5">
                     <p className="text-sm font-semibold" style={{ color: theme.primary }}>
                       {s.date}
                     </p>
@@ -389,7 +392,7 @@ export function BaseTemplate({
                     <p className="mt-1 text-sm" style={{ color: theme.muted }}>
                       {s.description}
                     </p>
-                  </div>
+                  </FrameCard>
                 </Reveal>
               ))}
             </div>
@@ -404,9 +407,10 @@ export function BaseTemplate({
           <div className="grid gap-6 md:grid-cols-2">
             {events.map((e, i) => (
               <Reveal key={i} delay={i * 0.1}>
-                <div
-                  className="flex h-full flex-col items-center rounded-xl border p-6 text-center"
-                  style={{ borderColor: theme.accent }}
+                <FrameCard
+                  slug={tSlug}
+                  theme={theme}
+                  className="flex h-full flex-col items-center p-6 text-center"
                 >
                   <h3 className="text-2xl" style={{ color: theme.primary, fontFamily: theme.fontHeading }}>
                     {e.name}
@@ -426,14 +430,14 @@ export function BaseTemplate({
                   <p className="mt-2 text-xs" style={{ color: theme.muted }}>
                     {e.address}
                   </p>
-                </div>
+                </FrameCard>
               </Reveal>
             ))}
           </div>
           {data.maps.embed && (
-            <div className="mt-8 overflow-hidden rounded-xl border" style={{ borderColor: theme.accent }}>
+            <FrameCard slug={tSlug} theme={theme} className="mt-8 overflow-hidden">
               <iframe src={data.maps.embed} title="Lokasi" className="h-60 w-full" loading="lazy" />
-            </div>
+            </FrameCard>
           )}
           {data.maps.url && (
             <div className="mt-5 text-center">
@@ -460,7 +464,8 @@ export function BaseTemplate({
                 <button
                   key={i}
                   onClick={() => setLightbox(src)}
-                  className="relative aspect-square overflow-hidden rounded-xl"
+                  className="relative aspect-square overflow-hidden rounded-xl border-2"
+                  style={{ borderColor: theme.primary }}
                 >
                   <Image
                     src={src}
@@ -481,6 +486,7 @@ export function BaseTemplate({
         <div className="mx-auto max-w-lg">
           <SectionTitle overline="Konfirmasi Kehadiran" title="RSVP" theme={theme} />
           {submitRsvp ? (
+            <FrameCard slug={tSlug} theme={theme} className="p-6">
             <form action={rsvpAction} className="space-y-4">
               <input type="hidden" name="guest_name_default" value={guestName} />
               <input
@@ -535,6 +541,7 @@ export function BaseTemplate({
               )}
               <SubmitBtn label="Kirim Konfirmasi" theme={theme} />
             </form>
+            </FrameCard>
           ) : (
             <p className="text-center text-sm" style={{ color: theme.muted }}>
               Form RSVP aktif setelah undangan dipublikasikan.
@@ -548,6 +555,7 @@ export function BaseTemplate({
         <div className="mx-auto max-w-lg">
           <SectionTitle overline="Doa & Ucapan" title="Ucapan" theme={theme} />
           {submitWish ? (
+            <FrameCard slug={tSlug} theme={theme} className="p-6">
             <form action={wishAction} className="space-y-3">
               <input
                 type="text"
@@ -582,6 +590,7 @@ export function BaseTemplate({
                 </div>
               </div>
             </form>
+            </FrameCard>
           ) : (
             <p className="text-center text-sm" style={{ color: theme.muted }}>
               Buku ucapan aktif setelah undangan dipublikasikan.
@@ -589,14 +598,14 @@ export function BaseTemplate({
           )}
           <div className="mt-8 max-h-96 space-y-3 overflow-y-auto pr-1">
             {wishes.map((w, i) => (
-              <div key={i} className="rounded-xl border p-4" style={{ borderColor: theme.accent, background: theme.surface }}>
+              <FrameCard key={i} slug={tSlug} theme={theme} className="p-4">
                 <p className="font-medium" style={{ color: theme.primary }}>
                   {w.name}
                 </p>
                 <p className="mt-1 text-sm" style={{ color: theme.muted }}>
                   {w.message}
                 </p>
-              </div>
+              </FrameCard>
             ))}
           </div>
         </div>
@@ -608,7 +617,7 @@ export function BaseTemplate({
           <SectionTitle overline="Tanda Kasih" title="Amplop Digital" theme={theme} />
           <div className="grid gap-4 md:grid-cols-2">
             {data.gift.banks.map((b, i) => (
-              <div key={i} className="space-y-2 rounded-xl border p-5" style={{ borderColor: theme.accent }}>
+              <FrameCard key={i} slug={tSlug} theme={theme} className="space-y-2 p-5">
                 <p className="font-semibold" style={{ color: theme.primary }}>
                   {b.bank}
                 </p>
@@ -619,11 +628,11 @@ export function BaseTemplate({
                   a.n. {b.holder}
                 </p>
                 <CopyBtn value={b.number} theme={theme} />
-              </div>
+              </FrameCard>
             ))}
           </div>
           {data.gift.address.value && (
-            <div className="mt-4 space-y-2 rounded-xl border p-5" style={{ borderColor: theme.accent }}>
+            <FrameCard slug={tSlug} theme={theme} className="mt-4 space-y-2 p-5">
               <p className="font-semibold" style={{ color: theme.primary }}>
                 {data.gift.address.label}
               </p>
@@ -631,7 +640,7 @@ export function BaseTemplate({
                 {data.gift.address.value}
               </p>
               <CopyBtn value={data.gift.address.value} theme={theme} />
-            </div>
+            </FrameCard>
           )}
         </div>
       </section>
