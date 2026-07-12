@@ -9,6 +9,11 @@ import {
   Send,
   Hexagon,
   LayoutDashboard,
+  Wand2,
+  Users,
+  BarChart3,
+  MessageSquareHeart,
+  Smartphone,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -47,12 +52,43 @@ async function getDemoMap(): Promise<Record<string, string>> {
 const gradientText =
   "bg-gradient-to-r from-cyan-300 via-sky-300 to-violet-400 bg-clip-text text-transparent";
 
+const FEATURES = [
+  {
+    Icon: Wand2,
+    title: "8 Template Cerdas",
+    text: "Koleksi desain futuristik siap pakai. Pilih satu, kustomisasi dalam hitungan menit.",
+  },
+  {
+    Icon: PenLine,
+    title: "Editor Visual",
+    text: "Ubah teks, foto, musik, dan detail acara secara langsung dengan pratinjau live.",
+  },
+  {
+    Icon: Users,
+    title: "Manajemen Tamu",
+    text: "Daftar tamu, link undangan personal, hingga import massal dari CSV.",
+  },
+  {
+    Icon: MessageSquareHeart,
+    title: "RSVP & Ucapan",
+    text: "Tamu konfirmasi kehadiran dan mengirim doa — semua tersimpan otomatis.",
+  },
+  {
+    Icon: BarChart3,
+    title: "Analitik Langsung",
+    text: "Pantau jumlah view, rasio RSVP, dan tamu yang sudah membuka undangan.",
+  },
+  {
+    Icon: Smartphone,
+    title: "Mobile-First",
+    text: "Tampilan sempurna di ponsel, tablet, maupun desktop — responsif 100%.",
+  },
+];
+
 export default async function LandingPage() {
   const demoMap = await getDemoMap();
   const demoSlug =
-    demoMap["floral"] ??
-    Object.values(demoMap)[0] ??
-    "floral-romance";
+    demoMap["floral"] ?? Object.values(demoMap)[0] ?? "floral-romance";
   const user = await getUser();
   return (
     <div className="relative min-h-screen overflow-hidden bg-slate-950 text-slate-100">
@@ -68,8 +104,8 @@ export default async function LandingPage() {
               "radial-gradient(ellipse 80% 60% at 50% 0%, #000 60%, transparent 100%)",
           }}
         />
-        <div className="absolute -top-32 left-1/4 h-96 w-96 rounded-full bg-cyan-500/25 blur-[120px]" />
-        <div className="absolute top-10 right-1/4 h-96 w-96 rounded-full bg-violet-600/25 blur-[120px]" />
+        <div className="absolute -top-32 left-1/4 h-96 w-96 animate-pulse rounded-full bg-cyan-500/25 blur-[120px]" />
+        <div className="absolute top-10 right-1/4 h-96 w-96 animate-pulse rounded-full bg-violet-600/25 blur-[120px]" />
         <div className="absolute bottom-0 left-1/2 h-80 w-[40rem] -translate-x-1/2 rounded-full bg-sky-500/15 blur-[130px]" />
       </div>
 
@@ -133,7 +169,7 @@ export default async function LandingPage() {
           </h1>
           <p className="mx-auto mt-6 max-w-xl text-base text-slate-400">
             Engine template cerdas, manajemen tamu otomatis, dan RSVP real-time —
-            semua dalam satu platform yang elegan dan cepat.
+            semua dalam satu platform yang elegan, cepat, dan tanpa ribet.
           </p>
           <div className="mt-9 flex flex-wrap justify-center gap-3">
             <Link href={user ? "/dashboard" : "/register"}>
@@ -185,6 +221,38 @@ export default async function LandingPage() {
         </div>
       </section>
 
+      {/* Features */}
+      <section className="relative border-y border-white/10 bg-white/[0.02] py-24">
+        <div className="container">
+          <div className="mx-auto max-w-2xl text-center">
+            <div className="text-xs font-medium uppercase tracking-[0.3em] text-cyan-300/80">
+              Fitur Unggulan
+            </div>
+            <h2 className="mt-3 text-3xl font-bold tracking-tight md:text-4xl">
+              Semua yang Kamu Butuhkan, <span className={gradientText}>Terangkum</span>
+            </h2>
+            <p className="mt-3 text-slate-400">
+              Dari desain hingga konfirmasi kehadiran — dibangun agar kamu fokus
+              menikmati hari spesial.
+            </p>
+          </div>
+          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {FEATURES.map(({ Icon, title, text }) => (
+              <div
+                key={title}
+                className="group rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur transition hover:border-cyan-400/40 hover:shadow-[0_0_30px_rgba(34,211,238,0.15)]"
+              >
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400/20 to-violet-500/20 ring-1 ring-cyan-400/30">
+                  <Icon className="h-6 w-6 text-cyan-300" />
+                </div>
+                <h3 className="mt-4 font-semibold text-white">{title}</h3>
+                <p className="mt-2 text-sm text-slate-400">{text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Templates */}
       <section id="templates" className="relative py-24">
         <div className="container">
@@ -196,48 +264,61 @@ export default async function LandingPage() {
               Pilihan <span className={gradientText}>Template</span>
             </h2>
             <p className="mt-3 text-slate-400">
-              8 desain futuristik siap pakai, dikustomisasi hanya dalam hitungan
-              menit.
+              8 desain futuristik siap pakai. Klik mana saja untuk melihat contoh
+              undangan langsung.
             </p>
           </div>
           <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {TEMPLATE_METAS.map((t) => (
-              <Card
-                key={t.slug}
-                className="group overflow-hidden border-white/10 bg-white/5 backdrop-blur transition hover:border-cyan-400/40 hover:shadow-[0_0_30px_rgba(34,211,238,0.2)]"
-              >
-                <div className="relative aspect-[3/4] overflow-hidden">
-                  <Image
-                    src={t.preview}
-                    alt={t.name}
-                    fill
-                    className="object-cover transition duration-500 group-hover:scale-105"
-                    sizes="(max-width:768px) 50vw, 25vw"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
-                  {t.premium && (
-                    <Badge
-                      variant="warning"
-                      className="absolute right-2 top-2 border-amber-300/40 bg-amber-400/20 text-amber-200 backdrop-blur"
-                    >
-                      Premium
-                    </Badge>
-                  )}
-                </div>
-                <CardContent className="pt-4">
-                  <h3 className="font-medium text-white">{t.name}</h3>
-                  <p className="mt-1 text-sm text-slate-400">{t.description}</p>
-                  {demoMap[t.slug] && (
-                    <Link
-                      href={`/i/${demoMap[t.slug]}`}
-                      className="mt-3 inline-flex items-center gap-1 text-sm text-cyan-300 hover:underline"
-                    >
-                      Lihat Contoh <ArrowRight className="h-3.5 w-3.5" />
-                    </Link>
-                  )}
-                </CardContent>
-              </Card>
-            ))}
+            {TEMPLATE_METAS.map((t) => {
+              const demo = demoMap[t.slug];
+              return (
+                <Card
+                  key={t.slug}
+                  className="group overflow-hidden border-white/10 bg-white/5 backdrop-blur transition hover:border-cyan-400/40 hover:shadow-[0_0_30px_rgba(34,211,238,0.2)]"
+                >
+                  <div className="relative aspect-[3/4] overflow-hidden">
+                    <Image
+                      src={t.preview}
+                      alt={t.name}
+                      fill
+                      className="object-cover transition duration-500 group-hover:scale-105"
+                      sizes="(max-width:768px) 50vw, 25vw"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
+                    {t.premium && (
+                      <Badge
+                        variant="warning"
+                        className="absolute right-2 top-2 border-amber-300/40 bg-amber-400/20 text-amber-200 backdrop-blur"
+                      >
+                        Premium
+                      </Badge>
+                    )}
+                    {demo && (
+                      <Link
+                        href={`/i/${demo}`}
+                        className="absolute inset-0 flex items-center justify-center opacity-0 transition group-hover:opacity-100"
+                      >
+                        <span className="rounded-full border border-white/30 bg-slate-950/70 px-4 py-2 text-sm font-medium text-white backdrop-blur">
+                          Lihat Contoh <ArrowRight className="ml-1 inline h-3.5 w-3.5" />
+                        </span>
+                      </Link>
+                    )}
+                  </div>
+                  <CardContent className="pt-4">
+                    <h3 className="font-medium text-white">{t.name}</h3>
+                    <p className="mt-1 text-sm text-slate-400">{t.description}</p>
+                    {demo && (
+                      <Link
+                        href={`/i/${demo}`}
+                        className="mt-3 inline-flex items-center gap-1 text-sm text-cyan-300 hover:underline"
+                      >
+                        Lihat Contoh <ArrowRight className="h-3.5 w-3.5" />
+                      </Link>
+                    )}
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
           <div className="mt-10 text-center">
             <Link href={`/i/${demoSlug}`}>
@@ -253,7 +334,7 @@ export default async function LandingPage() {
       </section>
 
       {/* How it works */}
-      <section className="relative py-24">
+      <section className="relative border-t border-white/10 py-24">
         <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-transparent via-cyan-950/20 to-transparent" />
         <div className="container">
           <div className="mx-auto max-w-2xl text-center">
@@ -310,6 +391,9 @@ export default async function LandingPage() {
             <h2 className="mt-3 text-3xl font-bold tracking-tight md:text-4xl">
               Harga <span className={gradientText}>Transparan</span>
             </h2>
+            <p className="mt-3 text-slate-400">
+              Mulai gratis, tingkatkan hanya saat kamu butuh lebih banyak.
+            </p>
           </div>
           <div className="mx-auto mt-12 grid max-w-3xl gap-6 md:grid-cols-2">
             {(Object.keys(PLANS) as Array<keyof typeof PLANS>).map((key) => {
@@ -380,7 +464,7 @@ export default async function LandingPage() {
       </section>
 
       {/* CTA */}
-      <section className="relative overflow-hidden py-28">
+      <section className="relative overflow-hidden border-t border-white/10 py-28">
         <div className="pointer-events-none absolute inset-0 -z-10">
           <div className="absolute left-1/2 top-1/2 h-72 w-[36rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet-600/20 blur-[120px]" />
         </div>
