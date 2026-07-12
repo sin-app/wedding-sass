@@ -14,11 +14,43 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { TEMPLATE_METAS } from "@/config/templates";
 import { PLANS } from "@/config/plans";
+import { createClient } from "@/lib/supabase/server";
+
+const ADMIN_ID = "f5e9944c-47c8-4934-ab9a-0dccffc43844";
+
+// Petakan setiap template -> slug undangan contoh milik admin (published).
+async function getDemoMap(): Promise<Record<string, string>> {
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase
+      .from("invitations")
+      .select("slug, templates(slug)")
+      .eq("user_id", ADMIN_ID)
+      .eq("status", "published");
+    const map: Record<string, string> = {};
+    (
+      data as
+        | Array<{ slug: string; templates?: { slug: string } | null }>
+        | null
+    )?.forEach((row) => {
+      const tSlug = row.templates?.slug;
+      if (tSlug && !map[tSlug]) map[tSlug] = row.slug;
+    });
+    return map;
+  } catch {
+    return {};
+  }
+}
 
 const gradientText =
   "bg-gradient-to-r from-cyan-300 via-sky-300 to-violet-400 bg-clip-text text-transparent";
 
-export default function LandingPage() {
+export default async function LandingPage() {
+  const demoMap = await getDemoMap();
+  const demoSlug =
+    demoMap["floral"] ??
+    Object.values(demoMap)[0] ??
+    "floral-romance";
   return (
     <div className="relative min-h-screen overflow-hidden bg-slate-950 text-slate-100">
       {/* ── Futuristic background: grid + glow orbs ── */}
@@ -50,7 +82,7 @@ export default function LandingPage() {
             </span>
           </Link>
           <nav className="flex items-center gap-2">
-            <Link href="/i/contoh">
+            <Link href={`/i/${demoSlug}`}>
               <Button variant="ghost" size="sm" className="text-slate-300 hover:text-white">
                 Lihat Contoh
               </Button>
@@ -96,7 +128,7 @@ export default function LandingPage() {
                 <UserPlus className="mr-2 h-4 w-4" /> Mulai Gratis
               </Button>
             </Link>
-            <Link href="/i/contoh">
+            <Link href={`/i/${demoSlug}`}>
               <Button
                 size="lg"
                 variant="outline"
@@ -171,12 +203,20 @@ export default function LandingPage() {
                 <CardContent className="pt-4">
                   <h3 className="font-medium text-white">{t.name}</h3>
                   <p className="mt-1 text-sm text-slate-400">{t.description}</p>
+                  {demoMap[t.slug] && (
+                    <Link
+                      href={`/i/${demoMap[t.slug]}`}
+                      className="mt-3 inline-flex items-center gap-1 text-sm text-cyan-300 hover:underline"
+                    >
+                      Lihat Contoh <ArrowRight className="h-3.5 w-3.5" />
+                    </Link>
+                  )}
                 </CardContent>
               </Card>
             ))}
           </div>
           <div className="mt-10 text-center">
-            <Link href="/i/contoh">
+            <Link href={`/i/${demoSlug}`}>
               <Button
                 variant="outline"
                 className="border-white/15 bg-white/5 text-slate-200 backdrop-blur hover:bg-white/10"
