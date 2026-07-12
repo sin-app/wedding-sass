@@ -22,7 +22,7 @@ export default async function BillingPage() {
       </p>
 
       <Card className="mb-6">
-        <CardContent className="flex items-center justify-between pt-6">
+        <CardContent className="flex flex-wrap items-center justify-between gap-3 pt-6">
           <div>
             <p className="text-sm text-muted-foreground">Paket saat ini</p>
             <p className="text-xl font-semibold">{PLANS[plan].label}</p>

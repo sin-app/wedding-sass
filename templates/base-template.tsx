@@ -97,11 +97,11 @@ function Countdown({ target, theme }: { target: string; theme: Theme }) {
   }, [target]);
 
   return (
-    <div className="flex items-center justify-center gap-3">
+    <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
       {["Hari", "Jam", "Menit", "Detik"].map((k) => (
         <div
           key={k}
-          className="flex h-[70px] w-16 flex-col items-center justify-center rounded-xl border backdrop-blur-sm"
+          className="flex h-[64px] w-14 flex-col items-center justify-center rounded-xl border backdrop-blur-sm sm:h-[70px] sm:w-16"
           style={{ borderColor: "rgba(255,255,255,0.35)", background: "rgba(255,255,255,0.12)" }}
         >
           <span className="text-2xl" style={{ fontFamily: theme.fontHeading }}>
