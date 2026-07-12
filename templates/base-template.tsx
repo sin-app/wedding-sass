@@ -14,12 +14,21 @@ import {
   Copy,
   Check,
   Heart,
+  Users,
+  MessageCircle,
+  Gift,
   X,
 } from "lucide-react";
 import { useFormState, useFormStatus } from "react-dom";
 import type { InvitationData } from "@/lib/types";
 import type { Theme } from "@/templates/theme";
 import { TemplateFrame } from "@/templates/frames";
+import {
+  BotanicalBackground,
+  FloralDivider,
+  LeafSprig,
+  Petal,
+} from "@/templates/decorations";
 import {
   asTemplateSlug,
   heroVariants,
@@ -119,7 +128,7 @@ function SectionTitle({ overline, title, theme }: { overline?: string; title: st
       >
         {title}
       </h2>
-      <div className="mx-auto mt-4 h-px w-24" style={{ background: theme.primary, opacity: 0.4 }} />
+      <FloralDivider theme={theme} />
     </div>
   );
 }
@@ -155,6 +164,42 @@ function SubmitBtn({ label, theme }: { label: string; theme: Theme }) {
     >
       {pending ? "Mengirim..." : label}
     </button>
+  );
+}
+
+/* Navbar bawah: navigasi antar-section, warnanya mengikuti tema */
+function BottomNav({ theme }: { theme: Theme }) {
+  const go = (id: string) => {
+    if (typeof document !== "undefined") {
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+  const items: { id: string; label: string; Icon: typeof Heart }[] = [
+    { id: "top", label: "Atas", Icon: Heart },
+    { id: "couple", label: "Mempelai", Icon: Users },
+    { id: "event", label: "Acara", Icon: CalendarDays },
+    { id: "rsvp", label: "RSVP", Icon: Check },
+    { id: "wishes", label: "Ucapan", Icon: MessageCircle },
+    { id: "gift", label: "Hadiah", Icon: Gift },
+  ];
+  return (
+    <nav
+      className="fixed inset-x-0 bottom-0 z-30 flex border-t"
+      style={{ background: theme.primary, color: theme.onPrimary, borderColor: theme.onPrimary }}
+      aria-label="Navigasi undangan"
+    >
+      {items.map(({ id, label, Icon }) => (
+        <button
+          key={id}
+          onClick={() => go(id)}
+          aria-label={label}
+          className="flex flex-1 flex-col items-center gap-0.5 py-2 text-[10px]"
+        >
+          <Icon className="h-5 w-5" />
+          <span>{label}</span>
+        </button>
+      ))}
+    </nav>
   );
 }
 
@@ -225,13 +270,19 @@ export function BaseTemplate({
   return (
     <div
       style={{ background: theme.bg, color: theme.text, fontFamily: theme.fontBody }}
-      className={preview ? "relative" : "relative min-h-screen"}
+      className={preview ? "relative" : "relative min-h-screen pb-24"}
     >
       <TemplateFrame slug={tSlug} theme={theme} />
+      <BotanicalBackground theme={theme} />
+      <Petal theme={theme} delay={0} left="12%" />
+      <Petal theme={theme} delay={4} left="38%" />
+      <Petal theme={theme} delay={8} left="64%" />
+      <Petal theme={theme} delay={11} left="86%" />
       {data.music.src && <audio ref={audioRef} src={data.music.src} loop preload="auto" />}
 
       {/* HERO */}
       <section
+        id="top"
         className="relative flex min-h-[100svh] items-center justify-center bg-cover bg-center px-6 text-center text-white"
         style={{ backgroundImage: `url(${data.hero.background})` }}
       >
@@ -270,7 +321,7 @@ export function BaseTemplate({
       </section>
 
       {/* GREETING + COUPLE */}
-      <section className="px-6 py-20" style={{ background: theme.surface }}>
+      <section id="couple" className="px-6 py-20" style={{ background: theme.surface }}>
         <div className="mx-auto max-w-3xl">
           <SectionTitle overline="Bismillah" title="Mempelai" theme={theme} />
           <p className="mx-auto mb-12 max-w-xl text-center text-sm" style={{ color: theme.muted }}>
@@ -280,7 +331,8 @@ export function BaseTemplate({
             {[groom, bride].map((p, idx) => (
               <div key={idx} className={idx === 1 ? "contents" : ""}>
                 {idx === 1 && (
-                  <div className="hidden items-center justify-center md:flex">
+                  <div className="hidden flex-col items-center justify-center md:flex">
+                    <LeafSprig theme={theme} className="mb-2" />
                     <span
                       className="text-5xl"
                       style={{ fontFamily: theme.fontScript, color: theme.primary }}
@@ -321,7 +373,7 @@ export function BaseTemplate({
 
       {/* STORY */}
       {data.story.length > 0 && (
-        <section className="px-6 py-20">
+        <section id="story" className="px-6 py-20">
           <div className="mx-auto max-w-2xl">
             <SectionTitle overline="Perjalanan Kami" title="Love Story" theme={theme} />
             <div className="space-y-8">
@@ -346,7 +398,7 @@ export function BaseTemplate({
       )}
 
       {/* EVENT */}
-      <section className="px-6 py-20" style={{ background: theme.surface }}>
+      <section id="event" className="px-6 py-20" style={{ background: theme.surface }}>
         <div className="mx-auto max-w-3xl">
           <SectionTitle overline="Save The Date" title="Acara" theme={theme} />
           <div className="grid gap-6 md:grid-cols-2">
@@ -400,7 +452,7 @@ export function BaseTemplate({
 
       {/* GALLERY */}
       {data.gallery.length > 0 && (
-        <section className="px-6 py-20">
+        <section id="gallery" className="px-6 py-20">
           <div className="mx-auto max-w-4xl">
             <SectionTitle overline="Momen Kami" title="Galeri" theme={theme} />
             <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
@@ -425,7 +477,7 @@ export function BaseTemplate({
       )}
 
       {/* RSVP */}
-      <section className="px-6 py-20" style={{ background: theme.surface }}>
+      <section id="rsvp" className="px-6 py-20" style={{ background: theme.surface }}>
         <div className="mx-auto max-w-lg">
           <SectionTitle overline="Konfirmasi Kehadiran" title="RSVP" theme={theme} />
           {submitRsvp ? (
@@ -492,7 +544,7 @@ export function BaseTemplate({
       </section>
 
       {/* WISHES */}
-      <section className="px-6 py-20">
+      <section id="wishes" className="px-6 py-20">
         <div className="mx-auto max-w-lg">
           <SectionTitle overline="Doa & Ucapan" title="Ucapan" theme={theme} />
           {submitWish ? (
@@ -551,7 +603,7 @@ export function BaseTemplate({
       </section>
 
       {/* GIFT */}
-      <section className="px-6 py-20" style={{ background: theme.surface }}>
+      <section id="gift" className="px-6 py-20" style={{ background: theme.surface }}>
         <div className="mx-auto max-w-2xl">
           <SectionTitle overline="Tanda Kasih" title="Amplop Digital" theme={theme} />
           <div className="grid gap-4 md:grid-cols-2">
@@ -669,10 +721,11 @@ export function BaseTemplate({
       )}
 
       {preview && (
-        <div className="pointer-events-none absolute right-3 top-3 z-30 rounded-full bg-black/60 px-3 py-1 text-xs text-white">
-          <Heart className="mr-1 inline h-3 w-3" /> Pratinjau
-        </div>
-      )}
+         <div className="pointer-events-none absolute right-3 top-3 z-30 rounded-full bg-black/60 px-3 py-1 text-xs text-white">
+           <Heart className="mr-1 inline h-3 w-3" /> Pratinjau
+         </div>
+       )}
+      <BottomNav theme={theme} />
     </div>
   );
 }

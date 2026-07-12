@@ -285,7 +285,11 @@ insert into public.templates (slug, name, thumbnail, premium) values
   ('classic', 'Classic Elegant', null, false),
   ('floral', 'Floral Romance', null, true),
   ('minimalist', 'Modern Minimalist', null, true),
-  ('luxury', 'Luxury Gold', null, true)
+  ('luxury', 'Luxury Gold', null, true),
+  ('garden', 'Garden Rose', null, true),
+  ('boho', 'Bohemian Bloom', null, true),
+  ('vintage', 'Vintage Bloom', null, true),
+  ('meadow', 'Spring Meadow', null, true)
 on conflict (slug) do nothing;
 
 -- =====================================================================

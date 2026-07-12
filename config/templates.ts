@@ -44,6 +44,42 @@ export const TEMPLATE_METAS: TemplateMeta[] = [
     preview:
       "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=800&auto=format&fit=crop",
   },
+  {
+    slug: "garden",
+    name: "Garden Rose",
+    description: "Sentuhan sage & blush dengan rangkaian mawar taman yang lembut.",
+    premium: true,
+    accent: "#7c8a6b",
+    preview:
+      "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?q=80&w=800&auto=format&fit=crop",
+  },
+  {
+    slug: "boho",
+    name: "Bohemian Bloom",
+    description: "Terakota hangat & krem dengan bunga bohemian yang santai.",
+    premium: true,
+    accent: "#c2724e",
+    preview:
+      "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop",
+  },
+  {
+    slug: "vintage",
+    name: "Vintage Bloom",
+    description: "Dusty blue & rose gold bernuansa klasik yang penuh kenangan.",
+    premium: true,
+    accent: "#7d8ca3",
+    preview:
+      "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=800&auto=format&fit=crop",
+  },
+  {
+    slug: "meadow",
+    name: "Spring Meadow",
+    description: "Lavender & mint segar dengan bunga padang rumput yang cerah.",
+    premium: true,
+    accent: "#9b8fc4",
+    preview:
+      "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=800&auto=format&fit=crop",
+  },
 ];
 
 export function getTemplateMeta(slug: string) {

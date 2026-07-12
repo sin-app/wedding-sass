@@ -17,12 +17,28 @@ export function MinimalistTemplate(p: Props) {
 export function LuxuryTemplate(p: Props) {
   return <BaseTemplate {...p} theme={getTheme("luxury")} />;
 }
+export function GardenTemplate(p: Props) {
+  return <BaseTemplate {...p} theme={getTheme("garden")} />;
+}
+export function BohoTemplate(p: Props) {
+  return <BaseTemplate {...p} theme={getTheme("boho")} />;
+}
+export function VintageTemplate(p: Props) {
+  return <BaseTemplate {...p} theme={getTheme("vintage")} />;
+}
+export function MeadowTemplate(p: Props) {
+  return <BaseTemplate {...p} theme={getTheme("meadow")} />;
+}
 
 export const TEMPLATE_REGISTRY: Record<string, (p: Props) => JSX.Element> = {
   classic: ClassicTemplate,
   floral: FloralTemplate,
   minimalist: MinimalistTemplate,
   luxury: LuxuryTemplate,
+  garden: GardenTemplate,
+  boho: BohoTemplate,
+  vintage: VintageTemplate,
+  meadow: MeadowTemplate,
 };
 
 export function TemplateRenderer({
