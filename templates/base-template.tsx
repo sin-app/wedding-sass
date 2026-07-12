@@ -654,7 +654,7 @@ export function BaseTemplate({
         <button
           onClick={toggleMusic}
           aria-label="Musik"
-          className="fixed bottom-5 right-5 z-40 flex h-12 w-12 items-center justify-center rounded-full shadow-lg"
+          className="fixed bottom-20 right-4 z-40 flex h-12 w-12 items-center justify-center rounded-full shadow-lg sm:right-5"
           style={{ background: theme.primary, color: theme.onPrimary }}
         >
           {playing ? <Pause className="h-5 w-5" /> : <Music className="h-5 w-5 animate-pulse" />}

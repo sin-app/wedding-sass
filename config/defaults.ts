@@ -83,7 +83,10 @@ export const defaultInvitationData: InvitationData = {
       value: "Jl. Melati No. 10, RT 01/RW 02, Jakarta Selatan, 12345",
     },
   },
-  music: { src: "", title: "Backsound" },
+  music: {
+    src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3",
+    title: "Backsound",
+  },
   hero: {
     background:
       "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1600&auto=format&fit=crop",
