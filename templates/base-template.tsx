@@ -309,7 +309,7 @@ export function BaseTemplate({
           title="Musik latar"
           aria-hidden
           tabIndex={-1}
-          className="pointer-events-none absolute -left-[9999px] h-0 w-0 opacity-0"
+          className="pointer-events-none fixed -left-[9999px] top-0 h-[200px] w-[300px] opacity-0"
         />
       ) : (
         data.music.src && (
