@@ -13,11 +13,15 @@ export async function requestUpgrade(): Promise<Result> {
   const admin = createAdminClient();
   const { error } = await admin
     .from("subscriptions")
-    .update({
-      status: "pending",
-      note: `Permintaan upgrade Premium pada ${new Date().toISOString()}`,
-    })
-    .eq("user_id", session.user.id);
+    .upsert(
+      {
+        user_id: session.user.id,
+        status: "pending",
+        note: `Permintaan upgrade Premium pada ${new Date().toISOString()}`,
+        updated_at: new Date().toISOString(),
+      },
+      { onConflict: "user_id" }
+    );
 
   if (error) return { ok: false, message: error.message };
   revalidatePath("/dashboard/billing");

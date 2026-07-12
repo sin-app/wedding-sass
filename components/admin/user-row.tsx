@@ -1,6 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { Shield, ShieldOff, Crown, Ban } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -23,6 +24,7 @@ export function UserRow({
   status: SubStatus;
 }) {
   const [pending, start] = useTransition();
+  const router = useRouter();
 
   const statusVariant =
     status === "active" ? "success" : status === "pending" ? "warning" : "destructive";
@@ -46,7 +48,12 @@ export function UserRow({
             size="sm"
             variant="outline"
             disabled={pending}
-            onClick={() => start(async () => void (await setSubscription(id, "premium", "active")))}
+            onClick={() =>
+              start(async () => {
+                await setSubscription(id, "premium", "active");
+                router.refresh();
+              })
+            }
           >
             <Crown className="h-4 w-4" /> Premium
           </Button>
@@ -54,7 +61,12 @@ export function UserRow({
             size="sm"
             variant="outline"
             disabled={pending}
-            onClick={() => start(async () => void (await setSubscription(id, "free", "active")))}
+            onClick={() =>
+              start(async () => {
+                await setSubscription(id, "free", "active");
+                router.refresh();
+              })
+            }
           >
             <Ban className="h-4 w-4" /> Free
           </Button>

@@ -34,19 +34,26 @@ export async function setSubscription(
   const expires = new Date(now);
   expires.setFullYear(expires.getFullYear() + 1);
 
+  // Upsert (bukan update) agar tetap berlaku bila user belum punya baris
+  // subscription — update().eq() akan no-op (0 row) dan status tidak sync.
   const { error } = await admin
     .from("subscriptions")
-    .update({
-      plan,
-      status,
-      starts_at: plan === "premium" ? now.toISOString() : null,
-      expires_at: plan === "premium" ? expires.toISOString() : null,
-      updated_at: now.toISOString(),
-    })
-    .eq("user_id", userId);
+    .upsert(
+      {
+        user_id: userId,
+        plan,
+        status,
+        starts_at: plan === "premium" ? now.toISOString() : null,
+        expires_at: plan === "premium" ? expires.toISOString() : null,
+        updated_at: now.toISOString(),
+      },
+      { onConflict: "user_id" }
+    );
 
   if (error) return { ok: false, message: error.message };
   revalidatePath("/admin/users");
+  revalidatePath("/dashboard/billing");
+  revalidatePath("/dashboard");
   return { ok: true };
 }
 
