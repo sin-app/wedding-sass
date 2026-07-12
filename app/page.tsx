@@ -8,6 +8,7 @@ import {
   PenLine,
   Send,
   Hexagon,
+  LayoutDashboard,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -15,6 +16,7 @@ import { Badge } from "@/components/ui/badge";
 import { TEMPLATE_METAS } from "@/config/templates";
 import { PLANS } from "@/config/plans";
 import { createClient } from "@/lib/supabase/server";
+import { getUser } from "@/lib/auth";
 
 const ADMIN_ID = "f5e9944c-47c8-4934-ab9a-0dccffc43844";
 
@@ -51,6 +53,7 @@ export default async function LandingPage() {
     demoMap["floral"] ??
     Object.values(demoMap)[0] ??
     "floral-romance";
+  const user = await getUser();
   return (
     <div className="relative min-h-screen overflow-hidden bg-slate-950 text-slate-100">
       {/* ── Futuristic background: grid + glow orbs ── */}
@@ -87,19 +90,32 @@ export default async function LandingPage() {
                 Lihat Contoh
               </Button>
             </Link>
-            <Link href="/login">
-              <Button variant="ghost" size="sm" className="text-slate-300 hover:text-white">
-                Masuk
-              </Button>
-            </Link>
-            <Link href="/register">
-              <Button
-                size="sm"
-                className="border border-cyan-400/40 bg-cyan-500/10 text-cyan-200 shadow-[0_0_18px_rgba(34,211,238,0.35)] hover:bg-cyan-500/20"
-              >
-                Daftar
-              </Button>
-            </Link>
+            {user ? (
+              <Link href="/dashboard">
+                <Button
+                  size="sm"
+                  className="border border-cyan-400/40 bg-cyan-500/10 text-cyan-200 shadow-[0_0_18px_rgba(34,211,238,0.35)] hover:bg-cyan-500/20"
+                >
+                  Dashboard
+                </Button>
+              </Link>
+            ) : (
+              <>
+                <Link href="/login">
+                  <Button variant="ghost" size="sm" className="text-slate-300 hover:text-white">
+                    Masuk
+                  </Button>
+                </Link>
+                <Link href="/register">
+                  <Button
+                    size="sm"
+                    className="border border-cyan-400/40 bg-cyan-500/10 text-cyan-200 shadow-[0_0_18px_rgba(34,211,238,0.35)] hover:bg-cyan-500/20"
+                  >
+                    Daftar
+                  </Button>
+                </Link>
+              </>
+            )}
           </nav>
         </div>
       </header>
@@ -120,12 +136,20 @@ export default async function LandingPage() {
             semua dalam satu platform yang elegan dan cepat.
           </p>
           <div className="mt-9 flex flex-wrap justify-center gap-3">
-            <Link href="/register">
+            <Link href={user ? "/dashboard" : "/register"}>
               <Button
                 size="lg"
                 className="border border-cyan-400/50 bg-gradient-to-r from-cyan-500 to-violet-500 text-white shadow-[0_0_30px_rgba(34,211,238,0.45)] transition hover:shadow-[0_0_45px_rgba(139,92,246,0.55)]"
               >
-                <UserPlus className="mr-2 h-4 w-4" /> Mulai Gratis
+                {user ? (
+                  <>
+                    <LayoutDashboard className="mr-2 h-4 w-4" /> Ke Dashboard
+                  </>
+                ) : (
+                  <>
+                    <UserPlus className="mr-2 h-4 w-4" /> Mulai Gratis
+                  </>
+                )}
               </Button>
             </Link>
             <Link href={`/i/${demoSlug}`}>
