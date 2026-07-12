@@ -31,14 +31,14 @@ export function Sidebar({
 
   return (
     <aside className="glass relative z-10 flex w-full shrink-0 flex-col border-b border-white/10 bg-white/5 md:h-screen md:w-64 md:border-b-0 md:border-r">
-      <div className="flex items-center gap-2 p-5 font-semibold tracking-tight">
+      <div className="flex items-center gap-2 p-3 font-semibold tracking-tight md:p-5">
         <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-400 to-violet-500 shadow-[0_0_16px_rgba(34,211,238,0.45)]">
           <Heart className="h-4 w-4 text-slate-950" />
         </span>
         Wedding<span className="gradient-text">Ku</span>
       </div>
 
-      <nav className="flex gap-1 px-3 md:flex-col">
+      <nav className="flex gap-1 px-2 md:flex-col md:px-3">
         {nav.map((item) => {
           const active =
             item.href === "/dashboard"
@@ -48,30 +48,32 @@ export function Sidebar({
             <Link
               key={item.href}
               href={item.href}
+              title={item.label}
               className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                "flex flex-1 items-center justify-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors md:flex-none md:justify-start",
                 active
                   ? "bg-cyan-500/15 text-cyan-200 ring-1 ring-cyan-400/30"
                   : "text-slate-400 hover:bg-white/5 hover:text-slate-100"
               )}
             >
               <item.icon className="h-4 w-4" />
-              {item.label}
+              <span className="hidden md:inline">{item.label}</span>
             </Link>
           );
         })}
         {isAdmin && (
           <Link
             href="/admin"
+            title="Admin"
             className={cn(
-              "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+              "flex flex-1 items-center justify-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors md:flex-none md:justify-start",
               pathname.startsWith("/admin")
                 ? "bg-cyan-500/15 text-cyan-200 ring-1 ring-cyan-400/30"
                 : "text-slate-400 hover:bg-white/5 hover:text-slate-100"
             )}
           >
             <Shield className="h-4 w-4" />
-            Admin
+            <span className="hidden md:inline">Admin</span>
           </Link>
         )}
       </nav>
