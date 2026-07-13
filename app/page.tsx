@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import type { Metadata } from "next";
 import {
   Check,
   Sparkles,
@@ -22,6 +23,24 @@ import { TEMPLATE_METAS } from "@/config/templates";
 import { PLANS } from "@/config/plans";
 import { createClient } from "@/lib/supabase/server";
 import { getUser } from "@/lib/auth";
+
+export const metadata: Metadata = {
+  title: "WeddingKu — Undangan Pernikahan Digital Elegan",
+  description:
+    "Buat undangan pernikahan digital dari 8 template futuristik. Kelola tamu, RSVP, ucapan, & analitik dalam satu platform.",
+  keywords: [
+    "undangan pernikahan",
+    "undangan digital",
+    "wedding invitation",
+    "WeddingKu",
+  ],
+  openGraph: {
+    title: "WeddingKu — Undangan Pernikahan Digital Elegan",
+    description:
+      "Platform undangan pernikahan digital dengan 8 template, manajemen tamu, dan RSVP real-time.",
+    type: "website",
+  },
+};
 
 const ADMIN_ID = "f5e9944c-47c8-4934-ab9a-0dccffc43844";
 
