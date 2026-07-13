@@ -1,5 +1,8 @@
 import { createAdminClient } from "@/lib/supabase/admin";
-import { InvitationRow } from "@/components/admin/invitation-row";
+import {
+  InvitationsTable,
+  type InvitationRowData,
+} from "@/components/admin/invitations-table";
 import type { Invitation, Profile } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -24,41 +27,20 @@ export default async function AdminInvitations() {
     ]) ?? []
   );
   const emailMap = new Map(authList?.users?.map((u) => [u.id, u.email ?? ""]) ?? []);
-  const rows = (invs as Invitation[]) ?? [];
+
+  const rows: InvitationRowData[] = ((invs as Invitation[]) ?? []).map((inv) => ({
+    id: inv.id,
+    title: inv.title,
+    slug: inv.slug,
+    status: inv.status,
+    owner: nameMap.get(inv.user_id) || emailMap.get(inv.user_id) || "-",
+    views: inv.views,
+  }));
 
   return (
     <div className="mx-auto max-w-5xl">
       <h1 className="mb-6 text-2xl font-semibold">Undangan ({rows.length})</h1>
-      <div className="overflow-x-auto rounded-xl border border-border bg-card">
-        <table className="w-full text-left text-sm">
-          <thead className="bg-secondary/60">
-            <tr>
-              <th className="p-3">Undangan</th>
-              <th className="p-3">Pemilik</th>
-              <th className="p-3">Status</th>
-              <th className="p-3">Views</th>
-              <th className="p-3">Aksi</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((inv) => (
-              <InvitationRow
-                key={inv.id}
-                id={inv.id}
-                title={inv.title}
-                slug={inv.slug}
-                status={inv.status}
-                owner={
-                  nameMap.get(inv.user_id) ||
-                  emailMap.get(inv.user_id) ||
-                  "-"
-                }
-                views={inv.views}
-              />
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <InvitationsTable rows={rows} />
     </div>
   );
 }
