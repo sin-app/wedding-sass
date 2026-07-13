@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Plus, Pencil, ExternalLink, Users, Eye, BarChart3, MessageSquareHeart, Crown } from "lucide-react";
+import { Plus, Pencil, ExternalLink, Users, Eye, BarChart3, MessageSquareHeart, Crown, PenLine, Send } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { requireUser } from "@/lib/auth";
 import { getLimits } from "@/config/plans";
@@ -104,12 +104,36 @@ export default async function DashboardHome() {
       </Card>
 
       {list.length === 0 ? (
-        <Card>
-          <CardContent className="flex flex-col items-center py-16 text-center">
-            <p className="text-muted-foreground">Belum ada undangan. Buat undangan pertamamu.</p>
-            <Link href="/dashboard/new" className="mt-4">
-              <Button>
-                <Plus className="h-4 w-4" /> Buat Undangan
+        <Card className="border-white/10 bg-white/5">
+          <CardContent className="flex flex-col items-center py-14 text-center">
+            <h2 className="text-xl font-semibold">Mulai buat undangan pertamamu</h2>
+            <p className="mt-2 max-w-md text-sm text-muted-foreground">
+              Tiga langkah mudah untuk undangan digital yang elegan.
+            </p>
+            <div className="mt-8 grid w-full max-w-3xl gap-4 sm:grid-cols-3">
+              {[
+                { Icon: PenLine, title: "Pilih & Isi", text: "Ambil template, ubah nama, foto, & detail acara." },
+                { Icon: Users, title: "Kelola Tamu", text: "Tambah daftar tamu & pantau RSVP yang masuk." },
+                { Icon: Send, title: "Bagikan", text: "Sebarkan tautan, terima doa & ucapan." },
+              ].map(({ Icon, title, text }, i) => (
+                <div
+                  key={title}
+                  className="relative rounded-2xl border border-white/10 bg-white/[0.03] p-5 text-center"
+                >
+                  <div className="relative mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400/20 to-violet-500/20 ring-1 ring-cyan-400/30">
+                    <Icon className="h-6 w-6 text-cyan-300" />
+                    <span className="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full bg-slate-900 text-xs font-semibold text-cyan-300 ring-1 ring-cyan-400/40">
+                      {i + 1}
+                    </span>
+                  </div>
+                  <h3 className="mt-3 font-medium text-white">{title}</h3>
+                  <p className="mt-1 text-sm text-muted-foreground">{text}</p>
+                </div>
+              ))}
+            </div>
+            <Link href="/dashboard/new" className="mt-8">
+              <Button size="lg">
+                <Plus className="mr-2 h-4 w-4" /> Buat Undangan Sekarang
               </Button>
             </Link>
           </CardContent>
