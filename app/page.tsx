@@ -47,21 +47,30 @@ const ADMIN_ID = "f5e9944c-47c8-4934-ab9a-0dccffc43844";
 // Petakan setiap template -> slug undangan contoh milik admin (published).
 async function getDemoMap(): Promise<Record<string, string>> {
   try {
-    const supabase = await createClient();
-    const { data } = await supabase
-      .from("invitations")
-      .select("slug, templates(slug)")
-      .eq("user_id", ADMIN_ID)
-      .eq("status", "published");
+    const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    if (!base || !key) return {};
+    const res = await fetch(
+      `${base}/rest/v1/invitations?select=slug,templates(slug)&user_id=eq.${ADMIN_ID}&status=eq.published`,
+      {
+        headers: {
+          apikey: key,
+          Authorization: `Bearer ${key}`,
+          Accept: "application/json",
+        },
+        next: { revalidate: 300 },
+      }
+    );
+    if (!res.ok) return {};
+    const rows = (await res.json()) as Array<{
+      slug: string;
+      templates?: { slug: string } | null;
+    }>;
     const map: Record<string, string> = {};
-    (
-      data as
-        | Array<{ slug: string; templates?: { slug: string } | null }>
-        | null
-    )?.forEach((row) => {
+    for (const row of rows) {
       const tSlug = row.templates?.slug;
       if (tSlug && !map[tSlug]) map[tSlug] = row.slug;
-    });
+    }
     return map;
   } catch {
     return {};
