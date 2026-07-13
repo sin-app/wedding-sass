@@ -48,65 +48,105 @@ function CornerArt({ slug, stroke, fill }: { slug: TemplateSlug; stroke: string;
   const motif = FRAME_CONFIG[slug].motif;
   const svg = { fill: "none", stroke, strokeWidth: 1.4, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
   switch (motif) {
-    /* Floral: ranting berbunga 5 kelopak */
+    /* Floral: ranting berbunga mekar + kuncup */
     case "vine":
       return (
-        <svg viewBox="0 0 64 64" width="56" height="56" {...svg}>
+        <svg viewBox="0 0 64 64" width="58" height="58" {...svg}>
           <path d="M6 60 C12 42 30 24 56 16" />
           <path d="M20 44 C14 40 14 32 22 34 C26 38 24 46 20 44Z" fill={fill} opacity={0.6} />
+          <path d="M34 36 C28 32 28 24 36 26 C40 30 38 38 34 36Z" fill={fill} opacity={0.5} />
+          {/* blossom besar */}
           <circle cx="52" cy="9" r="3" fill={fill} />
           <circle cx="59" cy="14" r="3" fill={fill} />
           <circle cx="55" cy="21" r="3" fill={fill} />
           <circle cx="47" cy="21" r="3" fill={fill} />
           <circle cx="44" cy="14" r="3" fill={fill} />
-          <circle cx="51" cy="15" r="1.8" fill={stroke} />
+          <circle cx="51" cy="15" r="2" fill={stroke} />
+          {/* blossom kecil */}
+          <circle cx="40" cy="28" r="2" fill={fill} />
+          <circle cx="45" cy="31" r="2" fill={fill} />
+          <circle cx="42" cy="34" r="2" fill={fill} />
+          <circle cx="37" cy="33" r="2" fill={fill} />
+          <circle cx="42" cy="31" r="1.4" fill={stroke} />
+          {/* kuncup */}
+          <circle cx="26" cy="40" r="1.8" fill={fill} opacity={0.8} />
         </svg>
       );
-    /* Minimalist: sudut bersarang bersih */
+    /* Minimalist: sudut bersarang + diamond halus */
     case "tick":
       return (
-        <svg viewBox="0 0 64 64" width="34" height="34" {...svg}>
-          <path d="M5 24 L5 5 L24 5" />
-          <path d="M5 13 L13 13 L13 5" opacity={0.55} />
+        <svg viewBox="0 0 64 64" width="40" height="40" {...svg}>
+          <path d="M5 26 L5 5 L26 5" />
+          <path d="M5 14 L14 14 L14 5" opacity={0.55} />
+          <path d="M14 14 L18 18 L14 22 L10 18 Z" opacity={0.4} />
+          <circle cx="22" cy="22" r="1.4" fill={fill} opacity={0.5} />
         </svg>
       );
-    /* Luxury: berlian faceting */
+    /* Luxury: berlian + sparkle + laurel */
     case "gem":
       return (
-        <svg viewBox="0 0 64 64" width="56" height="56" {...svg}>
+        <svg viewBox="0 0 64 64" width="58" height="58" {...svg}>
           <path d="M32 8 L47 24 L38 54 L26 54 L17 24 Z" />
           <path d="M17 24 L47 24 M26 54 L32 24 L38 54" />
           <circle cx="32" cy="40" r="2.4" fill={fill} />
+          {/* gem kecil */}
+          <path d="M12 44 L18 52 L14 58 L8 52 Z" opacity={0.6} />
+          {/* sparkle */}
+          <path d="M52 14 L53 18 L57 19 L53 20 L52 24 L51 20 L47 19 L51 18 Z" fill={fill} stroke="none" opacity={0.85} />
+          <path d="M22 12 L22.6 14.4 L25 15 L22.6 15.6 L22 18 L21.4 15.6 L19 15 L21.4 14.4 Z" fill={fill} stroke="none" opacity={0.7} />
+          {/* laurel */}
+          <path d="M44 40 C50 38 54 42 54 48 C48 48 44 44 44 40Z" fill={fill} opacity={0.4} />
         </svg>
       );
-    /* Garden: kuncup mawar + daun */
+    /* Garden: mawar + kuncup + daun */
     case "rose":
       return (
-        <svg viewBox="0 0 64 64" width="54" height="54" {...svg}>
+        <svg viewBox="0 0 64 64" width="58" height="58" {...svg}>
           <path d="M10 60 C16 46 26 34 42 28" />
           <path d="M22 46 C16 42 16 34 24 36 C28 40 26 48 22 46Z" fill={fill} opacity={0.5} />
           <path d="M30 38 C38 36 43 30 37 26 C31 22 26 30 30 38Z" fill={fill} opacity={0.5} />
+          {/* mawar besar */}
           <circle cx="43" cy="22" r="9" />
           <path d="M43 22 C43 17 48 17 48 22 C48 28 38 28 38 22 C38 14 49 14 49 23" />
+          {/* mawar kecil */}
+          <circle cx="20" cy="30" r="5" />
+          <path d="M20 30 C20 27 23 27 23 30 C23 33 17 33 17 30 C17 25 24 25 24 31" opacity={0.7} />
+          {/* kuncup */}
+          <circle cx="33" cy="44" r="2.4" fill={fill} opacity={0.6} />
+          {/* daun tambahan */}
+          <path d="M40 36 C46 34 50 38 50 44 C44 44 40 40 40 36Z" fill={fill} opacity={0.4} />
         </svg>
       );
-    /* Boho: matahari ber sinar + lengkungan */
+    /* Boho: matahari + sinar + bintik */
     case "sun":
       return (
-        <svg viewBox="0 0 64 64" width="52" height="52" {...svg}>
+        <svg viewBox="0 0 64 64" width="56" height="56" {...svg}>
           <circle cx="24" cy="24" r="8" />
-          <path d="M24 8 V13 M24 35 V40 M8 24 H13 M35 24 H40 M13 13 L16 16 M35 13 L32 16 M13 35 L16 32 M35 35 L32 32" />
+          <path d="M24 8 V13 M24 35 V40 M8 24 H13 M35 24 H40 M13 13 L16 16 M35 13 L32 16 M13 35 L16 32 M35 35 L32 32 M24 4 V6 M24 42 V44 M4 24 H6 M42 24 H44" />
           <path d="M6 58 C6 30 30 8 58 6" opacity={0.45} />
+          {/* matahari kecil */}
+          <circle cx="46" cy="44" r="4" />
+          <path d="M46 38 V40 M46 48 V50 M40 44 H42 M50 44 H52" opacity={0.7} />
+          {/* bintik */}
+          <circle cx="36" cy="50" r="1.4" fill={fill} opacity={0.7} />
+          <circle cx="52" cy="26" r="1.4" fill={fill} opacity={0.7} />
+          <circle cx="54" cy="36" r="1.2" fill={fill} opacity={0.6} />
         </svg>
       );
-    /* Vintage: tangga art-deco + semburan */
+    /* Vintage: tangga art-deco + semburan + diamond */
     case "deco":
       return (
-        <svg viewBox="0 0 64 64" width="54" height="54" {...svg}>
+        <svg viewBox="0 0 64 64" width="58" height="58" {...svg}>
           <path d="M6 60 L6 30 L30 30 L30 6 L60 6" />
           <path d="M14 60 L14 38 L38 38 L38 14 L60 14" opacity={0.45} />
-          <path d="M6 30 L20 20 M30 30 L44 20" opacity={0.7} />
+          <path d="M6 30 L20 20 M30 30 L44 20 M6 44 L18 34 M14 38 L26 30" opacity={0.7} />
+          {/* semburan deco */}
+          <path d="M6 6 L14 14 M6 14 L14 6" opacity={0.7} />
           <circle cx="22" cy="22" r="2.4" fill={fill} stroke="none" />
+          {/* diamond kecil */}
+          <path d="M48 48 L52 52 L48 56 L44 52 Z" fill={fill} opacity={0.5} />
+          {/* chevron */}
+          <path d="M40 40 L46 46 L52 40" opacity={0.6} />
         </svg>
       );
     /* Meadow: rumpun bunga liar lebat + rerumputan + kupu-kupu */
@@ -181,15 +221,23 @@ function CornerArt({ slug, stroke, fill }: { slug: TemplateSlug; stroke: string;
           </g>
         </svg>
       );
-    /* Classic: gulungan scroll + daun */
+    /* Classic: gulungan scroll + daun + beri + seal */
     case "scroll":
     default:
       return (
-        <svg viewBox="0 0 64 64" width="48" height="48" {...svg}>
+        <svg viewBox="0 0 64 64" width="56" height="56" {...svg}>
           <path d="M4 60 C4 34 24 18 44 14" />
           <path d="M44 14 C55 12 59 19 54 25 C49 31 43 26 46 19" />
           <path d="M14 60 C14 46 28 32 44 28" opacity={0.45} />
-          <circle cx="12" cy="12" r="2.4" fill={fill} opacity={0.85} />
+          {/* daun kecil */}
+          <path d="M22 40 C18 36 18 30 24 31 C27 34 25 41 22 40Z" fill={fill} opacity={0.5} />
+          <path d="M34 30 C30 26 30 20 36 21 C39 24 37 31 34 30Z" fill={fill} opacity={0.5} />
+          {/* beri */}
+          <circle cx="30" cy="22" r="2" fill={fill} />
+          <circle cx="36" cy="18" r="1.6" fill={fill} opacity={0.8} />
+          {/* seal */}
+          <circle cx="12" cy="12" r="2.8" fill={fill} opacity={0.85} />
+          <circle cx="12" cy="12" r="1.2" stroke={stroke} strokeWidth={0.6} />
         </svg>
       );
   }
@@ -266,52 +314,73 @@ function CenterMotif({ slug, stroke, fill }: { slug: TemplateSlug; stroke: strin
   switch (motif) {
     case "vine":
       return (
-        <svg viewBox="0 0 48 48" width="44" height="44" {...svg}>
+        <svg viewBox="0 0 48 48" width="46" height="46" {...svg}>
           <circle cx="24" cy="14" r="3" fill={fill} />
           <circle cx="32" cy="19" r="3" fill={fill} />
           <circle cx="29" cy="29" r="3" fill={fill} />
           <circle cx="19" cy="29" r="3" fill={fill} />
           <circle cx="16" cy="19" r="3" fill={fill} />
           <circle cx="24" cy="22" r="2" fill={stroke} />
+          {/* kuncup samping */}
+          <circle cx="11" cy="33" r="1.8" fill={fill} />
+          <circle cx="37" cy="33" r="1.8" fill={fill} />
+          {/* daun */}
+          <path d="M24 33 C20 30 20 25 24 25 C28 25 28 30 24 33Z" fill={fill} opacity={0.45} />
         </svg>
       );
     case "tick":
       return (
-        <svg viewBox="0 0 48 48" width="34" height="34" {...svg}>
+        <svg viewBox="0 0 48 48" width="38" height="38" {...svg}>
           <path d="M24 12 L34 24 L24 36 L14 24 Z" />
           <path d="M24 17 L29 24 L24 31 L19 24 Z" opacity={0.4} />
+          <circle cx="24" cy="24" r="1.6" fill={fill} />
         </svg>
       );
     case "gem":
       return (
-        <svg viewBox="0 0 48 48" width="44" height="44" {...svg}>
+        <svg viewBox="0 0 48 48" width="46" height="46" {...svg}>
           <path d="M24 8 L34 20 L28 38 L20 38 L14 20 Z" />
           <path d="M14 20 L34 20 M20 38 L24 20 L28 38" />
           <circle cx="24" cy="28" r="2" fill={fill} />
+          {/* sparkles */}
+          <path d="M40 10 L41 13 L44 14 L41 15 L40 18 L39 15 L36 14 L39 13 Z" fill={fill} stroke="none" opacity={0.8} />
+          <path d="M9 34 L9.8 36.6 L12.4 37.4 L9.8 38.2 L9 41 L8.2 38.2 L5.6 37.4 L8.2 36.6 Z" fill={fill} stroke="none" opacity={0.7} />
         </svg>
       );
     case "rose":
       return (
-        <svg viewBox="0 0 48 48" width="44" height="44" {...svg}>
+        <svg viewBox="0 0 48 48" width="46" height="46" {...svg}>
           <circle cx="24" cy="20" r="8" />
           <path d="M24 20 C24 16 28 16 28 20 C28 25 20 25 20 20 C20 13 29 13 29 21" />
           <path d="M24 30 C26 26 30 26 30 30 C30 34 24 34 24 30Z" fill={fill} stroke="none" opacity={0.45} />
+          {/* mawar kecil samping */}
+          <circle cx="13" cy="32" r="4" />
+          <path d="M13 32 C13 30 15 30 15 32 C15 34 11 34 11 32 C11 29 15 29 15 33" opacity={0.7} />
+          <circle cx="35" cy="32" r="4" />
+          <path d="M35 32 C35 30 37 30 37 32 C37 34 33 34 33 32 C33 29 37 29 37 33" opacity={0.7} />
         </svg>
       );
     case "sun":
       return (
-        <svg viewBox="0 0 48 48" width="44" height="44" {...svg}>
+        <svg viewBox="0 0 48 48" width="46" height="46" {...svg}>
           <circle cx="24" cy="24" r="7" />
-          <path d="M24 10 V15 M24 33 V38 M10 24 H15 M33 24 H38 M14 14 L17 17 M34 14 L31 17 M14 34 L17 31 M34 34 L31 31" />
+          <path d="M24 10 V15 M24 33 V38 M10 24 H15 M33 24 H38 M14 14 L17 17 M34 14 L31 17 M14 34 L17 31 M34 34 L31 31 M24 6 V9 M24 39 V42 M6 24 H9 M39 24 H42" />
+          <circle cx="38" cy="38" r="1.6" fill={fill} opacity={0.7} />
+          <circle cx="10" cy="38" r="1.6" fill={fill} opacity={0.7} />
+          <circle cx="38" cy="10" r="1.4" fill={fill} opacity={0.6} />
         </svg>
       );
     case "deco":
       return (
-        <svg viewBox="0 0 48 48" width="44" height="44" {...svg}>
+        <svg viewBox="0 0 48 48" width="46" height="46" {...svg}>
           <path d="M12 36 L12 24 L24 24 L24 12 L36 12" />
           <path d="M12 30 L18 30 L18 36" opacity={0.5} />
           <path d="M24 24 L30 30 L36 30" opacity={0.5} />
           <circle cx="24" cy="24" r="2" fill={fill} stroke="none" />
+          {/* semburan */}
+          <path d="M24 6 L27 10 M24 6 L21 10 M24 6 L24 11" opacity={0.6} />
+          <path d="M12 12 L16 16 M12 16 L16 12" opacity={0.6} />
+          <path d="M36 12 L40 16 M36 16 L40 12" opacity={0.6} />
         </svg>
       );
     case "meadow":
