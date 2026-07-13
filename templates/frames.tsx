@@ -29,6 +29,7 @@ interface FrameStyle {
   inset: string;
   motif: Motif;
   keyline: boolean;
+  innerDots?: boolean;
 }
 
 /* Tiap template punya identitas frame tersendiri (2-tone: primary + accent) */
@@ -40,7 +41,7 @@ export const FRAME_CONFIG: Record<TemplateSlug, FrameStyle> = {
   garden: { border: "solid", width: 1.5, opacity: 0.65, radius: "rounded-2xl", inset: "inset-3 md:inset-4", motif: "rose", keyline: true },
   boho: { border: "dashed", width: 1.5, opacity: 0.65, radius: "rounded-3xl", inset: "inset-3 md:inset-4", motif: "sun", keyline: false },
   vintage: { border: "double", width: 3, opacity: 0.7, radius: "rounded-sm", inset: "inset-3 md:inset-4", motif: "deco", keyline: true },
-  meadow: { border: "solid", width: 1.5, opacity: 0.7, radius: "rounded-2xl", inset: "inset-3 md:inset-4", motif: "meadow", keyline: true },
+  meadow: { border: "solid", width: 1.5, opacity: 0.7, radius: "rounded-2xl", inset: "inset-3 md:inset-4", motif: "meadow", keyline: true, innerDots: true },
 };
 
 function CornerArt({ slug, stroke, fill }: { slug: TemplateSlug; stroke: string; fill: string }) {
@@ -163,9 +164,21 @@ function CornerArt({ slug, stroke, fill }: { slug: TemplateSlug; stroke: string;
           {/* kupu-kupu */}
           <ellipse cx="44" cy="11" rx="3" ry="2" fill={fill} opacity={0.6} />
           <ellipse cx="50" cy="11" rx="3" ry="2" fill={fill} opacity={0.6} />
-          <ellipse cx="44" cy="15" rx="2.4" ry="1.8" fill={fill} opacity={0.6} />
-          <ellipse cx="50" cy="15" rx="2.4" ry="1.8" fill={fill} opacity={0.6} />
+          <ellipse cx="44" cy="15" rx="2.4" ry={1.8} fill={fill} opacity={0.6} />
+          <ellipse cx="50" cy="15" rx="2.4" ry={1.8} fill={fill} opacity={0.6} />
           <path d="M47 9 L47 17" />
+          {/* wheat */}
+          <path d="M56 60 C56 52 57 46 58 42" />
+          <path d="M58 42 C56 40 56 38 58 38 C60 38 60 40 58 42Z" fill={fill} opacity={0.7} />
+          <path d="M57 47 C55 45 55 43 57 43 C59 43 59 45 57 47Z" fill={fill} opacity={0.7} />
+          <path d="M55 52 C53 50 53 48 55 48 C57 48 57 50 55 52Z" fill={fill} opacity={0.7} />
+          {/* lebah */}
+          <g opacity={0.75}>
+            <ellipse cx="46" cy="52" rx="3" ry="2" fill={fill} />
+            <path d="M44 51 H48 M44 53 H48" stroke={stroke} strokeWidth={0.6} />
+            <ellipse cx="44" cy="49" rx="2" ry={1.3} fill={stroke} opacity={0.25} />
+            <ellipse cx="48" cy="49" rx="2" ry={1.3} fill={stroke} opacity={0.25} />
+          </g>
         </svg>
       );
     /* Classic: gulungan scroll + daun */
@@ -195,6 +208,12 @@ export function TemplateFrame({ slug, theme }: { slug: string; theme: Theme }) {
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 z-20">
       <div className={`absolute ${cfg.inset} ${cfg.radius}`} style={borderStyle} />
+      {cfg.innerDots && (
+        <div
+          className={`absolute inset-4 md:inset-5 ${cfg.radius}`}
+          style={{ borderColor: theme.accent, borderWidth: 1, borderStyle: "dotted", opacity: 0.45 }}
+        />
+      )}
       {(["tl", "tr", "bl", "br"] as const).map((p) => (
         <div key={p} className="absolute hidden sm:block" style={POS[p]}>
           <CornerArt slug={s} stroke={theme.primary} fill={theme.accent} />
@@ -328,9 +347,16 @@ function CenterMotif({ slug, stroke, fill }: { slug: TemplateSlug; stroke: strin
           {/* kupu-kupu di atas */}
           <ellipse cx="21" cy="6" rx="2.4" ry="1.6" fill={fill} opacity={0.6} />
           <ellipse cx="27" cy="6" rx="2.4" ry="1.6" fill={fill} opacity={0.6} />
-          <ellipse cx="21" cy="9" rx="2" ry="1.4" fill={fill} opacity={0.6} />
-          <ellipse cx="27" cy="9" rx="2" ry="1.4" fill={fill} opacity={0.6} />
+          <ellipse cx="21" cy="9" rx="2" ry={1.4} fill={fill} opacity={0.6} />
+          <ellipse cx="27" cy="9" rx="2" ry={1.4} fill={fill} opacity={0.6} />
           <path d="M24 4 L24 11" />
+          {/* lebah */}
+          <g opacity={0.75}>
+            <ellipse cx="24" cy="38" rx="2.6" ry={1.8} fill={fill} />
+            <path d="M22 37 H26 M22 39 H26" stroke={stroke} strokeWidth={0.6} />
+            <ellipse cx="22" cy="35.5" rx={1.8} ry={1.2} fill={stroke} opacity={0.25} />
+            <ellipse cx="26" cy="35.5" rx={1.8} ry={1.2} fill={stroke} opacity={0.25} />
+          </g>
         </svg>
       );
     case "scroll":
