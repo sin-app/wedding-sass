@@ -59,6 +59,7 @@ export default async function DashboardHome() {
 
   return (
     <div className="mx-auto max-w-5xl">
+      <h1 className="mb-4 text-2xl font-semibold">Undangan Saya</h1>
       {/* Plan usage */}
       <Card className="mb-6 border-white/10 bg-white/5">
         <CardContent className="flex flex-col gap-4 pt-6 md:flex-row md:items-center md:justify-between">
