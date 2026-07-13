@@ -114,8 +114,6 @@ const FEATURES = [
 
 export default async function LandingPage() {
   const demoMap = await getDemoMap();
-  const demoSlug =
-    demoMap["floral"] ?? Object.values(demoMap)[0] ?? "floral-romance";
   const user = await getUser();
   return (
     <div className="relative min-h-screen overflow-hidden bg-slate-950 text-slate-100">
@@ -148,11 +146,6 @@ export default async function LandingPage() {
             </span>
           </Link>
           <nav className="flex items-center gap-2">
-            <Link href={`/i/${demoSlug}`}>
-              <Button variant="ghost" size="sm" className="text-slate-300 hover:text-white">
-                Lihat Contoh
-              </Button>
-            </Link>
             {user ? (
               <Link href="/dashboard">
                 <Button
@@ -213,15 +206,6 @@ export default async function LandingPage() {
                     <UserPlus className="mr-2 h-4 w-4" /> Mulai Gratis
                   </>
                 )}
-              </Button>
-            </Link>
-            <Link href={`/i/${demoSlug}`}>
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-white/15 bg-white/5 text-slate-200 backdrop-blur hover:bg-white/10"
-              >
-                Lihat Contoh Undangan <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
           </div>
@@ -317,19 +301,9 @@ export default async function LandingPage() {
              {TEMPLATE_METAS.map((t) => (
                <TemplateCard key={t.slug} meta={t} demo={demoMap[t.slug]} />
              ))}
-           </div>
-          <div className="mt-10 text-center">
-            <Link href={`/i/${demoSlug}`}>
-              <Button
-                variant="outline"
-                className="border-white/15 bg-white/5 text-slate-200 backdrop-blur hover:bg-white/10"
-              >
-                Lihat Contoh Nyata <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
+            </div>
+         </div>
+       </section>
 
       {/* How it works */}
       <section className="relative border-t border-white/10 py-24">

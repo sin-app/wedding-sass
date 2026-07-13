@@ -39,15 +39,16 @@ export function TemplateCard({
             </Badge>
           )}
           {demo && (
-            <button
-              type="button"
-              onClick={() => setOpen(true)}
-              className="absolute inset-0 flex items-center justify-center bg-slate-950/30 opacity-0 transition group-hover:opacity-100"
-            >
-              <span className="rounded-full border border-white/30 bg-slate-950/70 px-4 py-2 text-sm font-medium text-white backdrop-blur">
-                Lihat Contoh <ArrowRight className="ml-1 inline h-3.5 w-3.5" />
-              </span>
-            </button>
+              <button
+                type="button"
+                onClick={() => setOpen(true)}
+                className="absolute inset-0 flex items-center justify-center bg-slate-950/30 opacity-0 transition group-hover:opacity-100"
+                aria-label="Pratinjau template"
+              >
+                <span className="flex h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-slate-950/70 text-white backdrop-blur">
+                  <ArrowRight className="h-4 w-4" />
+                </span>
+              </button>
           )}
         </div>
         <CardContent className="pt-4">
@@ -57,8 +58,9 @@ export function TemplateCard({
             <button
               onClick={() => setOpen(true)}
               className="mt-3 inline-flex items-center gap-1 text-sm text-cyan-300 hover:underline"
+              aria-label="Pratinjau template"
             >
-              Lihat Contoh <ArrowRight className="h-3.5 w-3.5" />
+              <ArrowRight className="h-3.5 w-3.5" /> Pratinjau
             </button>
           ) : (
             <span className="mt-3 inline-block text-sm text-slate-500">
