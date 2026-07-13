@@ -330,6 +330,7 @@ export function BaseTemplate({
           title="Musik latar"
           aria-hidden
           tabIndex={-1}
+          allow="autoplay; encrypted-media; clipboard-write"
           className="pointer-events-none fixed left-0 top-0 h-px w-px opacity-0"
         />
       ) : (
