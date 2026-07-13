@@ -22,7 +22,7 @@ import {
 import { useFormState, useFormStatus } from "react-dom";
 import type { InvitationData } from "@/lib/types";
 import type { Theme } from "@/templates/theme";
-import { TemplateFrame, FrameCard } from "@/templates/frames";
+import { TemplateFrame, FrameCard, OrnamentDivider, TitleOrnament, BackgroundFloat } from "@/templates/frames";
 import { defaultInvitationData } from "@/config/defaults";
 
 function extractYouTubeId(url: string): string | null {
@@ -45,7 +45,6 @@ function fmtDate(iso: string): string {
 }
 import {
   BotanicalBackground,
-  FloralDivider,
   LeafSprig,
   Petal,
 } from "@/templates/decorations";
@@ -134,9 +133,10 @@ function Countdown({ target, theme }: { target: string; theme: Theme }) {
   );
 }
 
-function SectionTitle({ overline, title, theme }: { overline?: string; title: string; theme: Theme }) {
+function SectionTitle({ overline, title, theme, slug }: { overline?: string; title: string; theme: Theme; slug: string }) {
   return (
     <div className="mb-10 text-center">
+      <TitleOrnament slug={slug} theme={theme} />
       {overline && (
         <p className="text-xs uppercase tracking-[0.3em]" style={{ color: theme.muted }}>
           {overline}
@@ -148,7 +148,7 @@ function SectionTitle({ overline, title, theme }: { overline?: string; title: st
       >
         {title}
       </h2>
-      <FloralDivider theme={theme} />
+      <OrnamentDivider slug={slug} theme={theme} />
     </div>
   );
 }
@@ -400,9 +400,10 @@ export function BaseTemplate({
       </section>
 
       {/* GREETING + COUPLE */}
-      <section id="couple" className="px-6 py-20" style={{ background: theme.surface }}>
+      <section id="couple" className="relative px-6 py-20" style={{ background: theme.surface }}>
+        <BackgroundFloat slug={tSlug} theme={theme} />
         <div className="mx-auto max-w-3xl">
-          <SectionTitle overline="Bismillah" title="Mempelai" theme={theme} />
+          <SectionTitle overline="Bismillah" title="Mempelai" theme={theme} slug={tSlug} />
           <p className="mx-auto mb-12 max-w-xl text-center text-sm" style={{ color: theme.muted }}>
             {data.greeting}
           </p>
@@ -455,9 +456,10 @@ export function BaseTemplate({
 
       {/* STORY */}
       {story.length > 0 && (
-        <section id="story" className="px-6 py-20">
+        <section id="story" className="relative px-6 py-20">
+          <BackgroundFloat slug={tSlug} theme={theme} />
           <div className="mx-auto max-w-2xl">
-            <SectionTitle overline="Perjalanan Kami" title="Love Story" theme={theme} />
+            <SectionTitle overline="Perjalanan Kami" title="Love Story" theme={theme} slug={tSlug} />
             <div className="space-y-8">
               {story.map((s, i) => (
                 <Reveal key={i} delay={i * 0.05}>
@@ -482,7 +484,7 @@ export function BaseTemplate({
       {/* EVENT */}
       <section id="event" className="px-6 py-20" style={{ background: theme.surface }}>
         <div className="mx-auto max-w-3xl">
-          <SectionTitle overline="Save The Date" title="Acara" theme={theme} />
+          <SectionTitle overline="Save The Date" title="Acara" theme={theme} slug={tSlug} />
           <div className="grid gap-6 md:grid-cols-2">
             {events.map((e, i) => (
               <Reveal key={i} delay={i * 0.1}>
@@ -537,7 +539,7 @@ export function BaseTemplate({
       {gallery.length > 0 && (
         <section id="gallery" className="px-6 py-20">
           <div className="mx-auto max-w-4xl">
-            <SectionTitle overline="Momen Kami" title="Galeri" theme={theme} />
+            <SectionTitle overline="Momen Kami" title="Galeri" theme={theme} slug={tSlug} />
             <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
               {gallery.map((src, i) => (
                 <button
@@ -563,7 +565,7 @@ export function BaseTemplate({
       {/* RSVP */}
       <section id="rsvp" className="px-6 py-20" style={{ background: theme.surface }}>
         <div className="mx-auto max-w-lg">
-          <SectionTitle overline="Konfirmasi Kehadiran" title="RSVP" theme={theme} />
+          <SectionTitle overline="Konfirmasi Kehadiran" title="RSVP" theme={theme} slug={tSlug} />
           {submitRsvp ? (
             <FrameCard slug={tSlug} theme={theme} className="p-6">
             <form action={rsvpAction} className="space-y-4">
@@ -632,7 +634,7 @@ export function BaseTemplate({
       {/* WISHES */}
       <section id="wishes" className="px-6 py-20">
         <div className="mx-auto max-w-lg">
-          <SectionTitle overline="Doa & Ucapan" title="Ucapan" theme={theme} />
+          <SectionTitle overline="Doa & Ucapan" title="Ucapan" theme={theme} slug={tSlug} />
           {submitWish ? (
             <FrameCard slug={tSlug} theme={theme} className="p-6">
             <form action={wishAction} className="space-y-3">
@@ -691,9 +693,10 @@ export function BaseTemplate({
       </section>
 
       {/* GIFT */}
-      <section id="gift" className="px-6 py-20" style={{ background: theme.surface }}>
+      <section id="gift" className="relative px-6 py-20" style={{ background: theme.surface }}>
+        <BackgroundFloat slug={tSlug} theme={theme} />
         <div className="mx-auto max-w-2xl">
-          <SectionTitle overline="Tanda Kasih" title="Amplop Digital" theme={theme} />
+          <SectionTitle overline="Tanda Kasih" title="Amplop Digital" theme={theme} slug={tSlug} />
           <div className="grid gap-4 md:grid-cols-2">
             {banks.map((b, i) => (
               <FrameCard key={i} slug={tSlug} theme={theme} className="space-y-2 p-5">

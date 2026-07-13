@@ -191,3 +191,115 @@ export function FrameCard({
     </div>
   );
 }
+
+/* Motif tengah (centered) dipakai bersama oleh divider & aksen judul */
+function CenterMotif({ slug, stroke, fill }: { slug: TemplateSlug; stroke: string; fill: string }) {
+  const motif = FRAME_CONFIG[slug].motif;
+  const svg = { fill: "none", stroke, strokeWidth: 1.4, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
+  switch (motif) {
+    case "vine":
+      return (
+        <svg viewBox="0 0 48 48" width="44" height="44" {...svg}>
+          <circle cx="24" cy="14" r="3" fill={fill} />
+          <circle cx="32" cy="19" r="3" fill={fill} />
+          <circle cx="29" cy="29" r="3" fill={fill} />
+          <circle cx="19" cy="29" r="3" fill={fill} />
+          <circle cx="16" cy="19" r="3" fill={fill} />
+          <circle cx="24" cy="22" r="2" fill={stroke} />
+        </svg>
+      );
+    case "tick":
+      return (
+        <svg viewBox="0 0 48 48" width="34" height="34" {...svg}>
+          <path d="M24 12 L34 24 L24 36 L14 24 Z" />
+          <path d="M24 17 L29 24 L24 31 L19 24 Z" opacity={0.4} />
+        </svg>
+      );
+    case "gem":
+      return (
+        <svg viewBox="0 0 48 48" width="44" height="44" {...svg}>
+          <path d="M24 8 L34 20 L28 38 L20 38 L14 20 Z" />
+          <path d="M14 20 L34 20 M20 38 L24 20 L28 38" />
+          <circle cx="24" cy="28" r="2" fill={fill} />
+        </svg>
+      );
+    case "rose":
+      return (
+        <svg viewBox="0 0 48 48" width="44" height="44" {...svg}>
+          <circle cx="24" cy="20" r="8" />
+          <path d="M24 20 C24 16 28 16 28 20 C28 25 20 25 20 20 C20 13 29 13 29 21" />
+          <path d="M24 30 C26 26 30 26 30 30 C30 34 24 34 24 30Z" fill={fill} stroke="none" opacity={0.45} />
+        </svg>
+      );
+    case "sun":
+      return (
+        <svg viewBox="0 0 48 48" width="44" height="44" {...svg}>
+          <circle cx="24" cy="24" r="7" />
+          <path d="M24 10 V15 M24 33 V38 M10 24 H15 M33 24 H38 M14 14 L17 17 M34 14 L31 17 M14 34 L17 31 M34 34 L31 31" />
+        </svg>
+      );
+    case "deco":
+      return (
+        <svg viewBox="0 0 48 48" width="44" height="44" {...svg}>
+          <path d="M12 36 L12 24 L24 24 L24 12 L36 12" />
+          <path d="M12 30 L18 30 L18 36" opacity={0.5} />
+          <path d="M24 24 L30 30 L36 30" opacity={0.5} />
+          <circle cx="24" cy="24" r="2" fill={fill} stroke="none" />
+        </svg>
+      );
+    case "meadow":
+      return (
+        <svg viewBox="0 0 48 48" width="44" height="44" {...svg}>
+          <path d="M24 40 L24 24 M24 32 C20 28 20 22 24 22 C28 22 28 28 24 32Z" />
+          <circle cx="24" cy="18" r="3.4" fill={fill} stroke="none" />
+        </svg>
+      );
+    case "scroll":
+    default:
+      return (
+        <svg viewBox="0 0 48 48" width="40" height="40" {...svg}>
+          <path d="M14 32 C14 20 24 14 34 16 C40 17 39 24 34 23 C30 22 31 17 36 18" />
+          <path d="M14 32 C14 40 24 42 30 38" opacity={0.5} />
+          <circle cx="14" cy="28" r="2" fill={fill} />
+        </svg>
+      );
+  }
+}
+
+/* Pembatas antar-section, bertema tiap template (menggantikan FloralDivider) */
+export function OrnamentDivider({ slug, theme }: { slug: string; theme: Theme }) {
+  const s = asTemplateSlug(slug);
+  const c = theme.primary;
+  return (
+    <div className="mx-auto mt-4 flex items-center justify-center gap-3" style={{ color: c }}>
+      <span className="h-px w-16 opacity-40 md:w-24" style={{ background: c }} />
+      <CenterMotif slug={s} stroke={c} fill={theme.accent} />
+      <span className="h-px w-16 opacity-40 md:w-24" style={{ background: c }} />
+    </div>
+  );
+}
+
+/* Aksen kecil di atas judul section */
+export function TitleOrnament({ slug, theme }: { slug: string; theme: Theme }) {
+  const s = asTemplateSlug(slug);
+  return (
+    <div className="mb-3 flex justify-center opacity-90">
+      <CenterMotif slug={s} stroke={theme.primary} fill={theme.accent} />
+    </div>
+  );
+}
+
+/* Ornamen latar sangat redup di sudut section, mengikuti template */
+export function BackgroundFloat({ slug, theme }: { slug: string; theme: Theme }) {
+  const s = asTemplateSlug(slug);
+  return (
+    <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+      <div className="absolute -left-12 -top-12 opacity-[0.10]">
+        <CornerArt slug={s} stroke={theme.primary} fill={theme.accent} />
+      </div>
+      <div className="absolute -bottom-12 -right-12 rotate-180 opacity-[0.10]">
+        <CornerArt slug={s} stroke={theme.primary} fill={theme.accent} />
+      </div>
+    </div>
+  );
+}
