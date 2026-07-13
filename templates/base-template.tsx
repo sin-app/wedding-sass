@@ -31,6 +31,18 @@ function extractYouTubeId(url: string): string | null {
   );
   return m ? m[1] : null;
 }
+
+function fmtDate(iso: string): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return iso;
+  return new Intl.DateTimeFormat("id-ID", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(d);
+}
 import {
   BotanicalBackground,
   FloralDivider,
@@ -309,9 +321,19 @@ export function BaseTemplate({
     } else startAudio();
   };
 
-  const { couple, events } = data;
+  const { couple } = data;
   const groom = couple.groom;
   const bride = couple.bride;
+  // Hanya tampilkan entri yang benar-benar diisi admin (hindari kotak kosong).
+  const events = data.events.filter(
+    (e) =>
+      e.name?.trim() || e.date?.trim() || e.time?.trim() || e.venue?.trim() || e.address?.trim()
+  );
+  const story = data.story.filter(
+    (s) => s.date?.trim() || s.title?.trim() || s.description?.trim()
+  );
+  const gallery = data.gallery.filter((s) => s?.trim());
+  const banks = data.gift.banks.filter((b) => b.number?.trim());
 
   return (
     <div
@@ -370,7 +392,7 @@ export function BaseTemplate({
           >
             {groom.shortName} {theme.ampersand} {bride.shortName}
           </h1>
-          <p className="mt-6 text-white/90">{events[0]?.date}</p>
+          <p className="mt-6 text-white/90">{events[0]?.date || fmtDate(data.date)}</p>
           <div className="mt-10">
             <Countdown target={data.date} theme={theme} />
           </div>
@@ -432,12 +454,12 @@ export function BaseTemplate({
       </section>
 
       {/* STORY */}
-      {data.story.length > 0 && (
+      {story.length > 0 && (
         <section id="story" className="px-6 py-20">
           <div className="mx-auto max-w-2xl">
             <SectionTitle overline="Perjalanan Kami" title="Love Story" theme={theme} />
             <div className="space-y-8">
-              {data.story.map((s, i) => (
+              {story.map((s, i) => (
                 <Reveal key={i} delay={i * 0.05}>
                   <FrameCard slug={tSlug} theme={theme} className="p-5">
                     <p className="text-sm font-semibold" style={{ color: theme.primary }}>
@@ -512,12 +534,12 @@ export function BaseTemplate({
       </section>
 
       {/* GALLERY */}
-      {data.gallery.length > 0 && (
+      {gallery.length > 0 && (
         <section id="gallery" className="px-6 py-20">
           <div className="mx-auto max-w-4xl">
             <SectionTitle overline="Momen Kami" title="Galeri" theme={theme} />
             <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
-              {data.gallery.map((src, i) => (
+              {gallery.map((src, i) => (
                 <button
                   key={i}
                   onClick={() => setLightbox(src)}
@@ -673,7 +695,7 @@ export function BaseTemplate({
         <div className="mx-auto max-w-2xl">
           <SectionTitle overline="Tanda Kasih" title="Amplop Digital" theme={theme} />
           <div className="grid gap-4 md:grid-cols-2">
-            {data.gift.banks.map((b, i) => (
+            {banks.map((b, i) => (
               <FrameCard key={i} slug={tSlug} theme={theme} className="space-y-2 p-5">
                 <p className="font-semibold" style={{ color: theme.primary }}>
                   {b.bank}
