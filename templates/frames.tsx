@@ -40,7 +40,7 @@ export const FRAME_CONFIG: Record<TemplateSlug, FrameStyle> = {
   garden: { border: "solid", width: 1.5, opacity: 0.65, radius: "rounded-2xl", inset: "inset-3 md:inset-4", motif: "rose", keyline: true },
   boho: { border: "dashed", width: 1.5, opacity: 0.65, radius: "rounded-3xl", inset: "inset-3 md:inset-4", motif: "sun", keyline: false },
   vintage: { border: "double", width: 3, opacity: 0.7, radius: "rounded-sm", inset: "inset-3 md:inset-4", motif: "deco", keyline: true },
-  meadow: { border: "solid", width: 1.5, opacity: 0.6, radius: "rounded-2xl", inset: "inset-3 md:inset-4", motif: "meadow", keyline: true },
+  meadow: { border: "solid", width: 1.5, opacity: 0.7, radius: "rounded-2xl", inset: "inset-3 md:inset-4", motif: "meadow", keyline: true },
 };
 
 function CornerArt({ slug, stroke, fill }: { slug: TemplateSlug; stroke: string; fill: string }) {
@@ -108,16 +108,39 @@ function CornerArt({ slug, stroke, fill }: { slug: TemplateSlug; stroke: string;
           <circle cx="22" cy="22" r="2.4" fill={fill} stroke="none" />
         </svg>
       );
-    /* Meadow: 3 bunga liar ber tangkai */
+    /* Meadow: rumpun bunga liar + rerumputan */
     case "meadow":
       return (
-        <svg viewBox="0 0 64 64" width="52" height="52" {...svg}>
-          <path d="M14 60 L14 42 M14 52 C10 48 10 42 14 42 C18 42 18 48 14 52Z" />
-          <circle cx="14" cy="38" r="3" fill={fill} stroke="none" />
-          <path d="M30 60 L30 32 M30 46 C26 42 26 36 30 36 C34 36 34 42 30 46Z" />
-          <circle cx="30" cy="28" r="3.2" fill={fill} stroke="none" />
-          <path d="M46 60 L46 24 M46 40 C42 36 42 30 46 30 C50 30 50 36 46 40Z" />
-          <circle cx="46" cy="20" r="3.4" fill={fill} stroke="none" />
+        <svg viewBox="0 0 64 64" width="56" height="56" {...svg}>
+          <path d="M6 60 C4 44 8 30 16 22" />
+          <path d="M14 60 C14 46 20 34 30 28" />
+          <path d="M22 60 C24 48 32 40 40 36" />
+          <path d="M16 22 C10 18 10 12 16 12 C22 12 22 18 16 22Z" fill={fill} opacity={0.5} />
+          <path d="M30 28 C36 24 42 26 42 32 C36 36 30 34 30 28Z" fill={fill} opacity={0.5} />
+          {/* daisy 1 (tinggi) */}
+          <circle cx="16" cy="10" r="2.2" fill={fill} />
+          <circle cx="16" cy="5" r="1.8" fill={fill} />
+          <circle cx="21" cy="8" r="1.8" fill={fill} />
+          <circle cx="19" cy="13" r="1.8" fill={fill} />
+          <circle cx="11" cy="8" r="1.8" fill={fill} />
+          <circle cx="13" cy="13" r="1.8" fill={fill} />
+          <circle cx="16" cy="9" r="1.6" fill={stroke} />
+          {/* daisy 2 (tengah) */}
+          <circle cx="30" cy="24" r="2" fill={fill} />
+          <circle cx="30" cy="19" r="1.6" fill={fill} />
+          <circle cx="35" cy="22" r="1.6" fill={fill} />
+          <circle cx="33" cy="27" r="1.6" fill={fill} />
+          <circle cx="25" cy="27" r="1.6" fill={fill} />
+          <circle cx="27" cy="22" r="1.6" fill={fill} />
+          <circle cx="30" cy="23" r="1.4" fill={stroke} />
+          {/* daisy 3 (rendah) */}
+          <circle cx="40" cy="34" r="1.8" fill={fill} />
+          <circle cx="40" cy="30" r="1.4" fill={fill} />
+          <circle cx="44" cy="32" r="1.4" fill={fill} />
+          <circle cx="42" cy="36" r="1.4" fill={fill} />
+          <circle cx="36" cy="36" r="1.4" fill={fill} />
+          <circle cx="38" cy="32" r="1.4" fill={fill} />
+          <circle cx="40" cy="33" r="1.2" fill={stroke} />
         </svg>
       );
     /* Classic: gulungan scroll + daun */
@@ -249,9 +272,20 @@ function CenterMotif({ slug, stroke, fill }: { slug: TemplateSlug; stroke: strin
       );
     case "meadow":
       return (
-        <svg viewBox="0 0 48 48" width="44" height="44" {...svg}>
-          <path d="M24 40 L24 24 M24 32 C20 28 20 22 24 22 C28 22 28 28 24 32Z" />
-          <circle cx="24" cy="18" r="3.4" fill={fill} stroke="none" />
+        <svg viewBox="0 0 48 48" width="46" height="46" {...svg}>
+          <path d="M24 44 L24 26 M18 44 C16 36 18 30 24 26 M30 44 C32 36 30 30 24 26" />
+          <path d="M24 26 C20 22 20 16 24 16 C28 16 28 22 24 26Z" fill={fill} opacity={0.5} />
+          {/* daisy tengah */}
+          <circle cx="24" cy="14" r="2.6" fill={fill} />
+          <circle cx="24" cy="8" r="2.2" fill={fill} />
+          <circle cx="30" cy="12" r="2.2" fill={fill} />
+          <circle cx="28" cy="18" r="2.2" fill={fill} />
+          <circle cx="20" cy="18" r="2.2" fill={fill} />
+          <circle cx="18" cy="12" r="2.2" fill={fill} />
+          <circle cx="24" cy="13" r="2" fill={stroke} />
+          {/* kuncup sisi */}
+          <circle cx="12" cy="30" r="1.8" fill={fill} />
+          <circle cx="36" cy="30" r="1.8" fill={fill} />
         </svg>
       );
     case "scroll":
