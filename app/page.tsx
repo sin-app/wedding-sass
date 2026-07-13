@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import type { Metadata } from "next";
 import {
   Check,
@@ -18,8 +17,8 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { TEMPLATE_METAS } from "@/config/templates";
+import { TemplateCard } from "@/components/landing/template-card";
 import { PLANS } from "@/config/plans";
 import { createClient } from "@/lib/supabase/server";
 import { getUser } from "@/lib/auth";
@@ -249,6 +248,24 @@ export default async function LandingPage() {
         </div>
       </section>
 
+      {/* Trust strip */}
+      <section className="relative border-y border-white/10 bg-white/[0.02] py-5">
+        <div className="container flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm text-slate-400">
+          <span className="inline-flex items-center gap-2">
+            <span className="h-1.5 w-1.5 rounded-full bg-cyan-400" /> Pembayaran aman via SeaBank
+          </span>
+          <span className="inline-flex items-center gap-2">
+            <span className="h-1.5 w-1.5 rounded-full bg-cyan-400" /> Gratis untuk 1 undangan
+          </span>
+          <span className="inline-flex items-center gap-2">
+            <span className="h-1.5 w-1.5 rounded-full bg-cyan-400" /> Tanpa kartu kredit
+          </span>
+          <span className="inline-flex items-center gap-2">
+            <span className="h-1.5 w-1.5 rounded-full bg-cyan-400" /> Pratinjau sebelum publish
+          </span>
+        </div>
+      </section>
+
       {/* Features */}
       <section className="relative border-y border-white/10 bg-white/[0.02] py-24">
         <div className="container">
@@ -296,58 +313,11 @@ export default async function LandingPage() {
               undangan langsung.
             </p>
           </div>
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {TEMPLATE_METAS.map((t) => {
-              const demo = demoMap[t.slug];
-              return (
-                <Card
-                  key={t.slug}
-                  className="group overflow-hidden border-white/10 bg-white/5 backdrop-blur transition hover:border-cyan-400/40 hover:shadow-[0_0_30px_rgba(34,211,238,0.2)]"
-                >
-                  <div className="relative aspect-[3/4] overflow-hidden">
-                    <Image
-                      src={t.preview}
-                      alt={t.name}
-                      fill
-                      className="object-cover transition duration-500 group-hover:scale-105"
-                      sizes="(max-width:768px) 50vw, 25vw"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
-                    {t.premium && (
-                      <Badge
-                        variant="warning"
-                        className="absolute right-2 top-2 border-amber-300/40 bg-amber-400/20 text-amber-200 backdrop-blur"
-                      >
-                        Premium
-                      </Badge>
-                    )}
-                    {demo && (
-                      <Link
-                        href={`/i/${demo}`}
-                        className="absolute inset-0 flex items-center justify-center opacity-0 transition group-hover:opacity-100"
-                      >
-                        <span className="rounded-full border border-white/30 bg-slate-950/70 px-4 py-2 text-sm font-medium text-white backdrop-blur">
-                          Lihat Contoh <ArrowRight className="ml-1 inline h-3.5 w-3.5" />
-                        </span>
-                      </Link>
-                    )}
-                  </div>
-                  <CardContent className="pt-4">
-                    <h3 className="font-medium text-white">{t.name}</h3>
-                    <p className="mt-1 text-sm text-slate-400">{t.description}</p>
-                    {demo && (
-                      <Link
-                        href={`/i/${demo}`}
-                        className="mt-3 inline-flex items-center gap-1 text-sm text-cyan-300 hover:underline"
-                      >
-                        Lihat Contoh <ArrowRight className="h-3.5 w-3.5" />
-                      </Link>
-                    )}
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
+           <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+             {TEMPLATE_METAS.map((t) => (
+               <TemplateCard key={t.slug} meta={t} demo={demoMap[t.slug]} />
+             ))}
+           </div>
           <div className="mt-10 text-center">
             <Link href={`/i/${demoSlug}`}>
               <Button
