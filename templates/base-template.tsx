@@ -23,6 +23,7 @@ import { useFormState, useFormStatus } from "react-dom";
 import type { InvitationData } from "@/lib/types";
 import type { Theme } from "@/templates/theme";
 import { TemplateFrame, FrameCard } from "@/templates/frames";
+import { defaultInvitationData } from "@/config/defaults";
 
 function extractYouTubeId(url: string): string | null {
   const m = url.match(
@@ -232,7 +233,8 @@ export function BaseTemplate({
   const [lightbox, setLightbox] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const ytRef = useRef<HTMLIFrameElement | null>(null);
-  const ytId = extractYouTubeId(data.music.src);
+  const musicSrc = (data.music?.src ?? "").trim() || defaultInvitationData.music.src;
+  const ytId = extractYouTubeId(musicSrc);
   const isYt = ytId !== null;
 
   const playYoutube = (on: boolean) => {
@@ -267,10 +269,29 @@ export function BaseTemplate({
     }
   }, [wishState]);
 
+  const startAudio = () => {
+    const a = audioRef.current;
+    if (!a) return;
+    a.play()
+      .then(() => setPlaying(true))
+      .catch(() => {
+        // Autoplay blocked despite the gesture — retry on the next interaction.
+        const resume = () => {
+          a.play()
+            .then(() => setPlaying(true))
+            .catch(() => {});
+          window.removeEventListener("pointerdown", resume);
+          window.removeEventListener("keydown", resume);
+        };
+        window.addEventListener("pointerdown", resume, { once: true });
+        window.addEventListener("keydown", resume, { once: true });
+      });
+  };
+
   const openIt = () => {
     setOpened(true);
     if (isYt) playYoutube(true);
-    else audioRef.current?.play().then(() => setPlaying(true)).catch(() => {});
+    else startAudio();
     window.scrollTo({ top: 0 });
   };
   const toggleMusic = () => {
@@ -285,7 +306,7 @@ export function BaseTemplate({
     if (playing) {
       a.pause();
       setPlaying(false);
-    } else a.play().then(() => setPlaying(true)).catch(() => {});
+    } else startAudio();
   };
 
   const { couple, events } = data;
@@ -309,12 +330,10 @@ export function BaseTemplate({
           title="Musik latar"
           aria-hidden
           tabIndex={-1}
-          className="pointer-events-none fixed -left-[9999px] top-0 h-[200px] w-[300px] opacity-0"
+          className="pointer-events-none fixed left-0 top-0 h-px w-px opacity-0"
         />
       ) : (
-        data.music.src && (
-          <audio ref={audioRef} src={data.music.src} loop preload="auto" />
-        )
+        musicSrc && <audio ref={audioRef} src={musicSrc} loop preload="auto" />
       )}
 
       {/* HERO */}
@@ -696,7 +715,7 @@ export function BaseTemplate({
       </footer>
 
       {/* Music toggle */}
-      {opened && data.music.src && !preview && (
+      {opened && musicSrc && !preview && (
         <button
           onClick={toggleMusic}
           aria-label="Musik"
