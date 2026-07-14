@@ -96,7 +96,7 @@ export const TEMPLATE_METAS: TemplateMeta[] = [
     premium: true,
     accent: "#c8a24a",
     preview:
-      "https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=800&auto=format&fit=crop",
+      "https://images.pexels.com/photos/37831526/pexels-photo-37831526.jpeg?auto=compress&cs=tinysrgb&w=800",
   },
 ];
 

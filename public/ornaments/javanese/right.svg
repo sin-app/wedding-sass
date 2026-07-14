@@ -14,9 +14,9 @@
     </g>
   </defs>
   <g transform="translate(60,0) scale(-1,1)">
-    <line x1="12" y1="0" x2="12" y2="300" stroke="url(#gv)" stroke-width="1.5" opacity="0.5"/>
-    <use href="#kawung" transform="translate(8,50)"/>
-    <use href="#kawung" transform="translate(8,150)"/>
-    <use href="#kawung" transform="translate(8,250)"/>
+    <line x1="6" y1="0" x2="6" y2="300" stroke="url(#gv)" stroke-width="1.5" opacity="0.5"/>
+    <use href="#kawung" transform="translate(0,50)"/>
+    <use href="#kawung" transform="translate(0,150)"/>
+    <use href="#kawung" transform="translate(0,250)"/>
   </g>
 </svg>
