@@ -19,7 +19,8 @@ type Motif =
   | "rose"
   | "sun"
   | "deco"
-  | "meadow";
+  | "meadow"
+  | "midnight";
 
 interface FrameStyle {
   border: "solid" | "double" | "dashed" | "dotted";
@@ -42,6 +43,7 @@ export const FRAME_CONFIG: Record<TemplateSlug, FrameStyle> = {
   boho: { border: "dashed", width: 1.5, opacity: 0.65, radius: "rounded-3xl", inset: "inset-3 md:inset-4", motif: "sun", keyline: false },
   vintage: { border: "double", width: 3, opacity: 0.7, radius: "rounded-sm", inset: "inset-3 md:inset-4", motif: "deco", keyline: true },
   meadow: { border: "solid", width: 1.5, opacity: 0.7, radius: "rounded-2xl", inset: "inset-3 md:inset-4", motif: "meadow", keyline: true, innerDots: true },
+  midnight: { border: "double", width: 2, opacity: 0.85, radius: "rounded-md", inset: "inset-3 md:inset-4", motif: "midnight", keyline: true },
 };
 
 function CornerArt({ slug, stroke, fill }: { slug: TemplateSlug; stroke: string; fill: string }) {
@@ -221,6 +223,24 @@ function CornerArt({ slug, stroke, fill }: { slug: TemplateSlug; stroke: string;
           </g>
         </svg>
       );
+    /* Midnight: emas floral (gold foil) */
+    case "midnight":
+      return (
+        <svg viewBox="0 0 64 64" width="56" height="56" {...svg}>
+          <path d="M6 6 C6 28 16 44 44 48" />
+          <path d="M6 6 C18 6 32 10 44 24" />
+          <path d="M44 48 C54 48 60 42 60 34 C60 28 54 28 52 32 C50 36 54 42 58 40" />
+          <path d="M20 22 C14 16 14 10 22 12 C28 16 24 28 20 22Z" fill={fill} opacity={0.5} />
+          <path d="M32 36 C26 32 26 26 32 28 C38 32 34 40 32 36Z" fill={fill} opacity={0.5} />
+          <circle cx="46" cy="40" r="3" fill={fill} />
+          <circle cx="46" cy="33" r="3" fill={fill} />
+          <circle cx="52" cy="37" r="3" fill={fill} />
+          <circle cx="49" cy="45" r="3" fill={fill} />
+          <circle cx="41" cy="45" r="3" fill={fill} />
+          <circle cx="47" cy="40" r="2" fill={stroke} />
+          <circle cx="10" cy="10" r="2" fill={fill} opacity={0.8} />
+        </svg>
+      );
     /* Classic: gulungan scroll + daun + beri + seal */
     case "scroll":
     default:
@@ -252,6 +272,29 @@ export function TemplateFrame({ slug, theme }: { slug: string; theme: Theme }) {
     borderStyle: cfg.border,
     opacity: cfg.opacity,
   };
+
+  // Midnight Romance: bingkai emas dari ornament SVG (top/bottom) + garis tepi.
+  if (cfg.motif === "midnight") {
+    return (
+      <div aria-hidden className="pointer-events-none absolute inset-0 z-20">
+        <div className={`absolute ${cfg.inset} ${cfg.radius}`} style={borderStyle} />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/ornaments/top.svg"
+          alt=""
+          className="absolute left-0 top-0 w-full"
+          style={{ opacity: cfg.opacity }}
+        />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/ornaments/bottom.svg"
+          alt=""
+          className="absolute bottom-0 left-0 w-full"
+          style={{ opacity: cfg.opacity }}
+        />
+      </div>
+    );
+  }
 
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 z-20">
@@ -426,6 +469,20 @@ function CenterMotif({ slug, stroke, fill }: { slug: TemplateSlug; stroke: strin
             <ellipse cx="22" cy="35.5" rx={1.8} ry={1.2} fill={stroke} opacity={0.25} />
             <ellipse cx="26" cy="35.5" rx={1.8} ry={1.2} fill={stroke} opacity={0.25} />
           </g>
+        </svg>
+      );
+    case "midnight":
+      return (
+        <svg viewBox="0 0 48 48" width="46" height="46" {...svg}>
+          <circle cx="24" cy="14" r="3" fill={fill} />
+          <circle cx="32" cy="19" r="3" fill={fill} />
+          <circle cx="29" cy="29" r="3" fill={fill} />
+          <circle cx="19" cy="29" r="3" fill={fill} />
+          <circle cx="16" cy="19" r="3" fill={fill} />
+          <circle cx="24" cy="22" r="2" fill={stroke} />
+          <path d="M24 33 C20 30 20 25 24 25 C28 25 28 30 24 33Z" fill={fill} opacity={0.5} />
+          <circle cx="11" cy="33" r="1.8" fill={fill} />
+          <circle cx="37" cy="33" r="1.8" fill={fill} />
         </svg>
       );
     case "scroll":

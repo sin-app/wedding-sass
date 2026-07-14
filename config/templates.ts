@@ -80,6 +80,15 @@ export const TEMPLATE_METAS: TemplateMeta[] = [
     preview:
       "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=800&auto=format&fit=crop",
   },
+  {
+    slug: "midnight",
+    name: "Midnight Romance",
+    description: "Hitam elegan dengan aksen emas & bunga floral yang romantis.",
+    premium: true,
+    accent: "#d4af37",
+    preview:
+      "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=800&auto=format&fit=crop",
+  },
 ];
 
 export function getTemplateMeta(slug: string) {

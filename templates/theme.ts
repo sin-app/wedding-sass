@@ -162,6 +162,24 @@ export const THEMES: Record<string, Theme> = {
     uppercaseLabels: false,
     ampersand: "&",
   },
+  midnight: {
+    slug: "midnight",
+    bg: "#0b0b10",
+    surface: "#15151c",
+    text: "#f4f1ea",
+    muted: "#a89e8c",
+    primary: "#d4af37",
+    onPrimary: "#111111",
+    accent: "#e9c97a",
+    floral: "#d4af37",
+    fontHeading: "var(--font-serif)",
+    fontScript: "var(--font-script)",
+    fontBody: "var(--font-sans)",
+    heroOverlay: "rgba(0,0,0,0.65)",
+    useScript: true,
+    uppercaseLabels: true,
+    ampersand: "&",
+  },
 };
 
 export function getTheme(slug: string): Theme {

@@ -8,7 +8,8 @@ export type TemplateSlug =
   | "garden"
   | "boho"
   | "vintage"
-  | "meadow";
+  | "meadow"
+  | "midnight";
 
 const EASE_OUT = "easeOut";
 const EASE_LUXURY = [0.22, 1, 0.36, 1] as const;
@@ -47,6 +48,10 @@ export const heroVariants: Record<TemplateSlug, Variants> = {
     hidden: { opacity: 0, y: 16, scale: 0.98 },
     show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.9, ease: EASE_OUT } },
   },
+  midnight: {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0, transition: { duration: 1.2, ease: EASE_LUXURY } },
+  },
 };
 
 // Reveal per-section (digunakan oleh <Reveal>).
@@ -83,6 +88,10 @@ export const revealVariants: Record<TemplateSlug, Variants> = {
     hidden: { opacity: 0, y: 24 },
     show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: EASE_OUT } },
   },
+  midnight: {
+    hidden: { opacity: 0, y: 28 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.9, ease: EASE_LUXURY } },
+  },
 };
 
 export function asTemplateSlug(slug: string | undefined): TemplateSlug {
@@ -94,7 +103,8 @@ export function asTemplateSlug(slug: string | undefined): TemplateSlug {
       slug === "garden" ||
       slug === "boho" ||
       slug === "vintage" ||
-      slug === "meadow"
+      slug === "meadow" ||
+      slug === "midnight"
       ? slug
       : "classic"
   ) as TemplateSlug;
