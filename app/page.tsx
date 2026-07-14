@@ -41,41 +41,6 @@ export const metadata: Metadata = {
   },
 };
 
-const ADMIN_ID = "f5e9944c-47c8-4934-ab9a-0dccffc43844";
-
-// Petakan setiap template -> slug undangan contoh milik admin (published).
-async function getDemoMap(): Promise<Record<string, string>> {
-  try {
-    const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-    if (!base || !key) return {};
-    const res = await fetch(
-      `${base}/rest/v1/invitations?select=slug,templates(slug)&user_id=eq.${ADMIN_ID}&status=eq.published`,
-      {
-        headers: {
-          apikey: key,
-          Authorization: `Bearer ${key}`,
-          Accept: "application/json",
-        },
-        next: { revalidate: 300 },
-      }
-    );
-    if (!res.ok) return {};
-    const rows = (await res.json()) as Array<{
-      slug: string;
-      templates?: { slug: string } | null;
-    }>;
-    const map: Record<string, string> = {};
-    for (const row of rows) {
-      const tSlug = row.templates?.slug;
-      if (tSlug && !map[tSlug]) map[tSlug] = row.slug;
-    }
-    return map;
-  } catch {
-    return {};
-  }
-}
-
 const gradientText =
   "bg-gradient-to-r from-cyan-300 via-sky-300 to-violet-400 bg-clip-text text-transparent";
 
@@ -113,7 +78,6 @@ const FEATURES = [
 ];
 
 export default async function LandingPage() {
-  const demoMap = await getDemoMap();
   const user = await getUser();
   return (
     <div className="relative min-h-screen overflow-hidden bg-slate-950 text-slate-100">
@@ -297,11 +261,11 @@ export default async function LandingPage() {
               undangan langsung.
             </p>
           </div>
-           <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-             {TEMPLATE_METAS.map((t) => (
-               <TemplateCard key={t.slug} meta={t} demo={demoMap[t.slug]} />
-             ))}
-            </div>
+             <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+               {TEMPLATE_METAS.map((t) => (
+                 <TemplateCard key={t.slug} meta={t} />
+               ))}
+             </div>
          </div>
        </section>
 

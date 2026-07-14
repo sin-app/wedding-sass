@@ -1,26 +1,16 @@
-"use client";
-
-import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ExternalLink, X } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import type { TemplateMeta } from "@/config/templates";
 
-export function TemplateCard({
-  meta,
-  demo,
-}: {
-  meta: TemplateMeta;
-  demo?: string;
-}) {
-  const [open, setOpen] = useState(false);
-  const demoUrl = demo ? `/i/${demo}` : `/preview/${meta.slug}`;
+export function TemplateCard({ meta }: { meta: TemplateMeta }) {
+  const previewHref = `/preview/${meta.slug}`;
 
   return (
-    <>
-      <Card className="group overflow-hidden border-white/10 bg-white/5 backdrop-blur transition hover:border-cyan-400/40 hover:shadow-[0_0_30px_rgba(34,211,238,0.2)]">
+    <Link href={previewHref} className="group block">
+      <Card className="overflow-hidden border-white/10 bg-white/5 backdrop-blur transition hover:border-cyan-400/40 hover:shadow-[0_0_30px_rgba(34,211,238,0.2)]">
         <div className="relative aspect-[3/4] overflow-hidden">
           <Image
             src={meta.preview}
@@ -38,87 +28,20 @@ export function TemplateCard({
               Premium
             </Badge>
           )}
-          {demo ? (
-            <button
-              type="button"
-              onClick={() => setOpen(true)}
-              className="absolute inset-0 flex items-center justify-center bg-slate-950/30 opacity-0 transition group-hover:opacity-100"
-              aria-label="Pratinjau template"
-            >
-              <span className="flex h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-slate-950/70 text-white backdrop-blur">
-                <ArrowRight className="h-4 w-4" />
-              </span>
-            </button>
-          ) : (
-            <Link
-              href={demoUrl}
-              className="absolute inset-0 flex items-center justify-center bg-slate-950/30 opacity-0 transition group-hover:opacity-100"
-              aria-label="Pratinjau template"
-            >
-              <span className="flex h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-slate-950/70 text-white backdrop-blur">
-                <ArrowRight className="h-4 w-4" />
-              </span>
-            </Link>
-          )}
+          <span className="absolute inset-0 flex items-center justify-center bg-slate-950/30 opacity-0 transition group-hover:opacity-100">
+            <span className="flex h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-slate-950/70 text-white backdrop-blur">
+              <ArrowRight className="h-4 w-4" />
+            </span>
+          </span>
         </div>
         <CardContent className="pt-4">
           <h3 className="font-medium text-white">{meta.name}</h3>
           <p className="mt-1 text-sm text-slate-400">{meta.description}</p>
-          {demo ? (
-            <button
-              onClick={() => setOpen(true)}
-              className="mt-3 inline-flex items-center gap-1 text-sm text-cyan-300 hover:underline"
-              aria-label="Pratinjau template"
-            >
-              <ArrowRight className="h-3.5 w-3.5" /> Pratinjau
-            </button>
-          ) : (
-            <Link
-              href={demoUrl}
-              className="mt-3 inline-flex items-center gap-1 text-sm text-cyan-300 hover:underline"
-            >
-              <ArrowRight className="h-3.5 w-3.5" /> Pratinjau
-            </Link>
-          )}
+          <span className="mt-3 inline-flex items-center gap-1 text-sm text-cyan-300 group-hover:underline">
+            <ArrowRight className="h-3.5 w-3.5" /> Pratinjau
+          </span>
         </CardContent>
       </Card>
-
-      {open && demo && demoUrl && (
-        <div
-          className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur"
-          onClick={() => setOpen(false)}
-        >
-          <div
-            className="relative flex h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl border border-white/10 bg-slate-900"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
-              <span className="text-sm font-medium text-white">{meta.name}</span>
-              <div className="flex items-center gap-3">
-                <Link
-                  href={demoUrl}
-                  target="_blank"
-                  className="inline-flex items-center gap-1 text-sm text-cyan-300 hover:underline"
-                >
-                  <ExternalLink className="h-4 w-4" /> Buka tab baru
-                </Link>
-                <button
-                  onClick={() => setOpen(false)}
-                  aria-label="Tutup"
-                  className="rounded-full p-1 text-slate-300 hover:bg-white/10"
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
-            </div>
-            <iframe
-              src={demoUrl}
-              title={`Pratinjau ${meta.name}`}
-              className="h-[calc(100%-49px)] w-full bg-white"
-            />
-          </div>
-        </div>
-      )}
-    </>
+    </Link>
   );
 }
