@@ -16,7 +16,7 @@ export function TemplateCard({
   demo?: string;
 }) {
   const [open, setOpen] = useState(false);
-  const demoUrl = demo ? `/i/${demo}` : undefined;
+  const demoUrl = demo ? `/i/${demo}` : `/preview/${meta.slug}`;
 
   return (
     <>
@@ -38,17 +38,27 @@ export function TemplateCard({
               Premium
             </Badge>
           )}
-          {demo && (
-              <button
-                type="button"
-                onClick={() => setOpen(true)}
-                className="absolute inset-0 flex items-center justify-center bg-slate-950/30 opacity-0 transition group-hover:opacity-100"
-                aria-label="Pratinjau template"
-              >
-                <span className="flex h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-slate-950/70 text-white backdrop-blur">
-                  <ArrowRight className="h-4 w-4" />
-                </span>
-              </button>
+          {demo ? (
+            <button
+              type="button"
+              onClick={() => setOpen(true)}
+              className="absolute inset-0 flex items-center justify-center bg-slate-950/30 opacity-0 transition group-hover:opacity-100"
+              aria-label="Pratinjau template"
+            >
+              <span className="flex h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-slate-950/70 text-white backdrop-blur">
+                <ArrowRight className="h-4 w-4" />
+              </span>
+            </button>
+          ) : (
+            <Link
+              href={demoUrl}
+              className="absolute inset-0 flex items-center justify-center bg-slate-950/30 opacity-0 transition group-hover:opacity-100"
+              aria-label="Pratinjau template"
+            >
+              <span className="flex h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-slate-950/70 text-white backdrop-blur">
+                <ArrowRight className="h-4 w-4" />
+              </span>
+            </Link>
           )}
         </div>
         <CardContent className="pt-4">
@@ -63,14 +73,17 @@ export function TemplateCard({
               <ArrowRight className="h-3.5 w-3.5" /> Pratinjau
             </button>
           ) : (
-            <span className="mt-3 inline-block text-sm text-slate-500">
-              Segera hadir
-            </span>
+            <Link
+              href={demoUrl}
+              className="mt-3 inline-flex items-center gap-1 text-sm text-cyan-300 hover:underline"
+            >
+              <ArrowRight className="h-3.5 w-3.5" /> Pratinjau
+            </Link>
           )}
         </CardContent>
       </Card>
 
-      {open && demoUrl && (
+      {open && demo && demoUrl && (
         <div
           className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur"
           onClick={() => setOpen(false)}

@@ -26,7 +26,7 @@ import { getUser } from "@/lib/auth";
 export const metadata: Metadata = {
   title: "WeddingKu — Undangan Pernikahan Digital Elegan",
   description:
-    "Buat undangan pernikahan digital dari 8 template futuristik. Kelola tamu, RSVP, ucapan, & analitik dalam satu platform.",
+    "Buat undangan pernikahan digital dari 9 template futuristik. Kelola tamu, RSVP, ucapan, & analitik dalam satu platform.",
   keywords: [
     "undangan pernikahan",
     "undangan digital",
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "WeddingKu — Undangan Pernikahan Digital Elegan",
     description:
-      "Platform undangan pernikahan digital dengan 8 template, manajemen tamu, dan RSVP real-time.",
+      "Platform undangan pernikahan digital dengan 9 template, manajemen tamu, dan RSVP real-time.",
     type: "website",
   },
 };
@@ -82,7 +82,7 @@ const gradientText =
 const FEATURES = [
   {
     Icon: Wand2,
-    title: "8 Template Cerdas",
+    title: "9 Template Cerdas",
     text: "Koleksi desain futuristik siap pakai. Pilih satu, kustomisasi dalam hitungan menit.",
   },
   {
@@ -212,7 +212,7 @@ export default async function LandingPage() {
 
           <div className="mx-auto mt-16 grid max-w-3xl grid-cols-3 gap-4">
             {[
-              { v: "8", l: "Template Premium" },
+              { v: "9", l: "Template Premium" },
               { v: "100%", l: "Responsif" },
               { v: "<2m", l: "Buat Undangan" },
             ].map((s) => (
@@ -293,7 +293,7 @@ export default async function LandingPage() {
               Pilihan <span className={gradientText}>Template</span>
             </h2>
             <p className="mt-3 text-slate-400">
-              8 desain futuristik siap pakai. Klik mana saja untuk melihat contoh
+              9 desain futuristik siap pakai. Klik mana saja untuk melihat contoh
               undangan langsung.
             </p>
           </div>
