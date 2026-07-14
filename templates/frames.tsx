@@ -273,25 +273,25 @@ export function TemplateFrame({ slug, theme }: { slug: string; theme: Theme }) {
     opacity: cfg.opacity,
   };
 
-  // Midnight Romance: bingkai emas dari ornament SVG (top/bottom) + garis tepi.
+  // Midnight Romance: bingkai emas 4 sisi dari ornament SVG + garis tepi.
   if (cfg.motif === "midnight") {
     return (
       <div aria-hidden className="pointer-events-none absolute inset-0 z-20">
         <div className={`absolute ${cfg.inset} ${cfg.radius}`} style={borderStyle} />
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/ornaments/top.svg"
-          alt=""
-          className="absolute left-0 top-0 w-full"
-          style={{ opacity: cfg.opacity }}
-        />
+        <img src="/ornaments/top.svg" alt="" className="absolute left-0 top-0 w-full" style={{ opacity: cfg.opacity }} />
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/ornaments/bottom.svg"
-          alt=""
-          className="absolute bottom-0 left-0 w-full"
-          style={{ opacity: cfg.opacity }}
-        />
+        <img src="/ornaments/bottom.svg" alt="" className="absolute bottom-0 left-0 w-full" style={{ opacity: cfg.opacity }} />
+        {/* sisi kiri: aksen atas & bawah (tinggi tetap agar lebar tidak membesar) */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/ornaments/left.svg" alt="" className="absolute left-0 top-0 h-32 w-auto md:h-40" style={{ opacity: cfg.opacity }} />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/ornaments/left.svg" alt="" className="absolute bottom-0 left-0 h-32 w-auto -scale-y-100 md:h-40" style={{ opacity: cfg.opacity }} />
+        {/* sisi kanan */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/ornaments/right.svg" alt="" className="absolute right-0 top-0 h-32 w-auto md:h-40" style={{ opacity: cfg.opacity }} />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/ornaments/right.svg" alt="" className="absolute bottom-0 right-0 h-32 w-auto -scale-y-100 md:h-40" style={{ opacity: cfg.opacity }} />
       </div>
     );
   }
