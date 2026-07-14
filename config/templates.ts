@@ -89,6 +89,15 @@ export const TEMPLATE_METAS: TemplateMeta[] = [
     preview:
       "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=800&auto=format&fit=crop",
   },
+  {
+    slug: "javanese",
+    name: "Tradisional Jawa",
+    description: "Ivory & indigo dengan ornamen batik kawung, gunungan, & tumpal beraksen emas.",
+    premium: true,
+    accent: "#c8a24a",
+    preview:
+      "https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=800&auto=format&fit=crop",
+  },
 ];
 
 export function getTemplateMeta(slug: string) {

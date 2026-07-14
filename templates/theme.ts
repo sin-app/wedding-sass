@@ -180,6 +180,24 @@ export const THEMES: Record<string, Theme> = {
     uppercaseLabels: true,
     ampersand: "&",
   },
+  javanese: {
+    slug: "javanese",
+    bg: "#f6efe0",
+    surface: "#fffdf7",
+    text: "#1f2a3d",
+    muted: "#5b6478",
+    primary: "#22315c",
+    onPrimary: "#f6efe0",
+    accent: "#c8a24a",
+    floral: "#c8a24a",
+    fontHeading: "var(--font-serif)",
+    fontScript: "var(--font-script)",
+    fontBody: "var(--font-sans)",
+    heroOverlay: "rgba(27,42,74,0.45)",
+    useScript: true,
+    uppercaseLabels: true,
+    ampersand: "&",
+  },
 };
 
 export function getTheme(slug: string): Theme {

@@ -9,7 +9,8 @@ export type TemplateSlug =
   | "boho"
   | "vintage"
   | "meadow"
-  | "midnight";
+  | "midnight"
+  | "javanese";
 
 const EASE_OUT = "easeOut";
 const EASE_LUXURY = [0.22, 1, 0.36, 1] as const;
@@ -49,6 +50,10 @@ export const heroVariants: Record<TemplateSlug, Variants> = {
     show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.9, ease: EASE_OUT } },
   },
   midnight: {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0, transition: { duration: 1.2, ease: EASE_LUXURY } },
+  },
+  javanese: {
     hidden: { opacity: 0, y: 20 },
     show: { opacity: 1, y: 0, transition: { duration: 1.2, ease: EASE_LUXURY } },
   },
@@ -92,6 +97,10 @@ export const revealVariants: Record<TemplateSlug, Variants> = {
     hidden: { opacity: 0, y: 28 },
     show: { opacity: 1, y: 0, transition: { duration: 0.9, ease: EASE_LUXURY } },
   },
+  javanese: {
+    hidden: { opacity: 0, y: 28 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.9, ease: EASE_LUXURY } },
+  },
 };
 
 export function asTemplateSlug(slug: string | undefined): TemplateSlug {
@@ -104,7 +113,8 @@ export function asTemplateSlug(slug: string | undefined): TemplateSlug {
       slug === "boho" ||
       slug === "vintage" ||
       slug === "meadow" ||
-      slug === "midnight"
+      slug === "midnight" ||
+      slug === "javanese"
       ? slug
       : "classic"
   ) as TemplateSlug;

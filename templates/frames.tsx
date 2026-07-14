@@ -20,7 +20,8 @@ type Motif =
   | "sun"
   | "deco"
   | "meadow"
-  | "midnight";
+  | "midnight"
+  | "kawung";
 
 interface FrameStyle {
   border: "solid" | "double" | "dashed" | "dotted";
@@ -44,6 +45,7 @@ export const FRAME_CONFIG: Record<TemplateSlug, FrameStyle> = {
   vintage: { border: "double", width: 3, opacity: 0.7, radius: "rounded-sm", inset: "inset-3 md:inset-4", motif: "deco", keyline: true },
   meadow: { border: "solid", width: 1.5, opacity: 0.7, radius: "rounded-2xl", inset: "inset-3 md:inset-4", motif: "meadow", keyline: true, innerDots: true },
   midnight: { border: "double", width: 2, opacity: 0.85, radius: "rounded-md", inset: "inset-3 md:inset-4", motif: "midnight", keyline: true },
+  javanese: { border: "double", width: 3, opacity: 0.85, radius: "rounded-sm", inset: "inset-3 md:inset-4", motif: "kawung", keyline: true },
 };
 
 function CornerArt({ slug, stroke, fill }: { slug: TemplateSlug; stroke: string; fill: string }) {
@@ -243,6 +245,21 @@ function CornerArt({ slug, stroke, fill }: { slug: TemplateSlug; stroke: string;
           <circle cx="10" cy="10" r="2" fill={fill} opacity={0.8} />
         </svg>
       );
+    /* Javanese: Kawung (4 lingkaran beririsan) — sudut */
+    case "kawung":
+      return (
+        <svg viewBox="0 0 64 64" width="56" height="56" {...svg}>
+          <circle cx="24" cy="12" r="12" />
+          <circle cx="36" cy="24" r="12" />
+          <circle cx="24" cy="36" r="12" />
+          <circle cx="12" cy="24" r="12" />
+          <circle cx="24" cy="24" r="5" fill={fill} opacity={0.6} stroke="none" />
+          <circle cx="24" cy="2" r="2" fill={fill} stroke="none" />
+          <circle cx="46" cy="24" r="2" fill={fill} stroke="none" />
+          <circle cx="24" cy="46" r="2" fill={fill} stroke="none" />
+          <circle cx="2" cy="24" r="2" fill={fill} stroke="none" />
+        </svg>
+      );
     /* Classic: gulungan scroll + daun + beri + seal */
     case "scroll":
     default:
@@ -298,6 +315,37 @@ export function TemplateFrame({ slug, theme }: { slug: string; theme: Theme }) {
           className="absolute right-0 top-0 h-full w-12 md:w-14"
           style={{
             backgroundImage: "url(/ornaments/right.svg)",
+            backgroundRepeat: "repeat-y",
+            backgroundSize: "48px 240px md:56px 280px",
+            opacity: cfg.opacity,
+          }}
+        />
+      </div>
+    );
+  }
+
+  // Tradisional Jawa: bingkai 4 sisi dari ornament SVG (tumpal + kawung + gunungan).
+  if (s === "javanese") {
+    return (
+      <div aria-hidden className="pointer-events-none absolute inset-0 z-20">
+        <div className={`absolute ${cfg.inset} ${cfg.radius}`} style={borderStyle} />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/ornaments/javanese/top.svg" alt="" className="absolute left-0 top-0 w-full" style={{ opacity: cfg.opacity }} />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/ornaments/javanese/bottom.svg" alt="" className="absolute bottom-0 left-0 w-full" style={{ opacity: cfg.opacity }} />
+        <div
+          className="absolute left-0 top-0 h-full w-12 md:w-14"
+          style={{
+            backgroundImage: "url(/ornaments/javanese/left.svg)",
+            backgroundRepeat: "repeat-y",
+            backgroundSize: "48px 240px md:56px 280px",
+            opacity: cfg.opacity,
+          }}
+        />
+        <div
+          className="absolute right-0 top-0 h-full w-12 md:w-14"
+          style={{
+            backgroundImage: "url(/ornaments/javanese/right.svg)",
             backgroundRepeat: "repeat-y",
             backgroundSize: "48px 240px md:56px 280px",
             opacity: cfg.opacity,
@@ -538,12 +586,23 @@ function CenterMotif({ slug, stroke, fill }: { slug: TemplateSlug; stroke: strin
           <circle cx="37" cy="33" r="1.8" fill={fill} />
         </svg>
       );
+    /* Javanese: Gunungan (gunungan wayang) — motif tengah */
+    case "kawung":
+      return (
+        <svg viewBox="0 0 48 48" width="46" height="46" {...svg}>
+          <path d="M24 44 C10 40 8 22 24 4 C40 22 38 40 24 44 Z" />
+          <path d="M24 38 C14 35 13 22 24 10 C35 22 34 35 24 38 Z" fill={fill} fillOpacity={0.25} strokeWidth={1} />
+          <path d="M24 32 C18 30 17 22 24 16 C31 22 30 30 24 32 Z" fill={fill} fillOpacity={0.5} strokeWidth={0.8} />
+          <circle cx="24" cy="24" r="2.2" fill={fill} stroke="none" />
+          <circle cx="24" cy="6" r="1.6" fill={fill} stroke="none" />
+        </svg>
+      );
     case "scroll":
     default:
       return (
         <svg viewBox="0 0 48 48" width="40" height="40" {...svg}>
           <path d="M14 32 C14 20 24 14 34 16 C40 17 39 24 34 23 C30 22 31 17 36 18" />
-          <path d="M14 32 C14 40 24 42 30 38" opacity={0.5} />
+          <path d="M14 32 C14 40 24 42 30 38" opacity="0.5" />
           <circle cx="14" cy="28" r="2" fill={fill} />
         </svg>
       );
