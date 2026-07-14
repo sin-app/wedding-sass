@@ -303,20 +303,18 @@ export function TemplateFrame({ slug, theme }: { slug: string; theme: Theme }) {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/ornaments/bottom.svg" alt="" className="absolute bottom-0 left-0 w-full" style={{ opacity: cfg.opacity }} />
         <div
-          className="absolute left-0 top-0 h-full w-12 md:w-14"
+          className="absolute left-0 top-0 h-full w-12 bg-[length:48px_240px] md:w-14 md:bg-[length:56px_280px]"
           style={{
             backgroundImage: "url(/ornaments/left.svg)",
             backgroundRepeat: "repeat-y",
-            backgroundSize: "48px 240px md:56px 280px",
             opacity: cfg.opacity,
           }}
         />
         <div
-          className="absolute right-0 top-0 h-full w-12 md:w-14"
+          className="absolute right-0 top-0 h-full w-12 bg-[length:48px_240px] md:w-14 md:bg-[length:56px_280px]"
           style={{
             backgroundImage: "url(/ornaments/right.svg)",
             backgroundRepeat: "repeat-y",
-            backgroundSize: "48px 240px md:56px 280px",
             opacity: cfg.opacity,
           }}
         />
@@ -334,20 +332,18 @@ export function TemplateFrame({ slug, theme }: { slug: string; theme: Theme }) {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/ornaments/javanese/bottom.svg" alt="" className="absolute bottom-0 left-0 w-full" style={{ opacity: cfg.opacity }} />
         <div
-          className="absolute left-0 top-0 h-full w-12 md:w-14"
+          className="absolute left-0 top-0 h-full w-12 bg-[length:48px_240px] md:w-14 md:bg-[length:56px_280px]"
           style={{
             backgroundImage: "url(/ornaments/javanese/left.svg)",
             backgroundRepeat: "repeat-y",
-            backgroundSize: "48px 240px md:56px 280px",
             opacity: cfg.opacity,
           }}
         />
         <div
-          className="absolute right-0 top-0 h-full w-12 md:w-14"
+          className="absolute right-0 top-0 h-full w-12 bg-[length:48px_240px] md:w-14 md:bg-[length:56px_280px]"
           style={{
             backgroundImage: "url(/ornaments/javanese/right.svg)",
             backgroundRepeat: "repeat-y",
-            backgroundSize: "48px 240px md:56px 280px",
             opacity: cfg.opacity,
           }}
         />
