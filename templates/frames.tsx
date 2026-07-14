@@ -74,14 +74,16 @@ function CornerArt({ slug, stroke, fill }: { slug: TemplateSlug; stroke: string;
           <circle cx="26" cy="40" r="1.8" fill={fill} opacity={0.8} />
         </svg>
       );
-    /* Minimalist: sudut bersarang + diamond halus */
+    /* Minimalist: sudut bersarang + diamond + sparkle halus */
     case "tick":
       return (
-        <svg viewBox="0 0 64 64" width="40" height="40" {...svg}>
-          <path d="M5 26 L5 5 L26 5" />
-          <path d="M5 14 L14 14 L14 5" opacity={0.55} />
-          <path d="M14 14 L18 18 L14 22 L10 18 Z" opacity={0.4} />
-          <circle cx="22" cy="22" r="1.4" fill={fill} opacity={0.5} />
+        <svg viewBox="0 0 64 64" width="42" height="42" {...svg}>
+          <path d="M5 30 L5 5 L30 5" />
+          <path d="M5 15 L15 15 L15 5" opacity={0.5} />
+          <path d="M15 15 L19 19 L15 23 L11 19 Z" opacity={0.45} />
+          <path d="M5 30 L15 30 M30 5 L30 15" opacity={0.3} />
+          <circle cx="23" cy="23" r="1.6" fill={fill} opacity={0.6} />
+          <path d="M40 14 L41 17 L44 18 L41 19 L40 22 L39 19 L36 18 L39 17 Z" fill={fill} stroke="none" opacity={0.5} />
         </svg>
       );
     /* Luxury: berlian + sparkle + laurel */
@@ -274,6 +276,7 @@ export function TemplateFrame({ slug, theme }: { slug: string; theme: Theme }) {
   };
 
   // Midnight Romance: bingkai emas 4 sisi dari ornament SVG + garis tepi.
+  // Sisi kiri/kanan memakai tile berulang (repeat-y) → lebar tetap di segala tinggi.
   if (cfg.motif === "midnight") {
     return (
       <div aria-hidden className="pointer-events-none absolute inset-0 z-20">
@@ -282,16 +285,24 @@ export function TemplateFrame({ slug, theme }: { slug: string; theme: Theme }) {
         <img src="/ornaments/top.svg" alt="" className="absolute left-0 top-0 w-full" style={{ opacity: cfg.opacity }} />
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/ornaments/bottom.svg" alt="" className="absolute bottom-0 left-0 w-full" style={{ opacity: cfg.opacity }} />
-        {/* sisi kiri: aksen atas & bawah (tinggi tetap agar lebar tidak membesar) */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/ornaments/left.svg" alt="" className="absolute left-0 top-0 h-32 w-auto md:h-40" style={{ opacity: cfg.opacity }} />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/ornaments/left.svg" alt="" className="absolute bottom-0 left-0 h-32 w-auto -scale-y-100 md:h-40" style={{ opacity: cfg.opacity }} />
-        {/* sisi kanan */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/ornaments/right.svg" alt="" className="absolute right-0 top-0 h-32 w-auto md:h-40" style={{ opacity: cfg.opacity }} />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/ornaments/right.svg" alt="" className="absolute bottom-0 right-0 h-32 w-auto -scale-y-100 md:h-40" style={{ opacity: cfg.opacity }} />
+        <div
+          className="absolute left-0 top-0 h-full w-12 md:w-14"
+          style={{
+            backgroundImage: "url(/ornaments/left.svg)",
+            backgroundRepeat: "repeat-y",
+            backgroundSize: "48px 240px md:56px 280px",
+            opacity: cfg.opacity,
+          }}
+        />
+        <div
+          className="absolute right-0 top-0 h-full w-12 md:w-14"
+          style={{
+            backgroundImage: "url(/ornaments/right.svg)",
+            backgroundRepeat: "repeat-y",
+            backgroundSize: "48px 240px md:56px 280px",
+            opacity: cfg.opacity,
+          }}
+        />
       </div>
     );
   }
@@ -373,10 +384,12 @@ function CenterMotif({ slug, stroke, fill }: { slug: TemplateSlug; stroke: strin
       );
     case "tick":
       return (
-        <svg viewBox="0 0 48 48" width="38" height="38" {...svg}>
+        <svg viewBox="0 0 48 48" width="40" height="40" {...svg}>
           <path d="M24 12 L34 24 L24 36 L14 24 Z" />
           <path d="M24 17 L29 24 L24 31 L19 24 Z" opacity={0.4} />
           <circle cx="24" cy="24" r="1.6" fill={fill} />
+          <path d="M40 10 L41 13 L44 14 L41 15 L40 18 L39 15 L36 14 L39 13 Z" fill={fill} stroke="none" opacity={0.5} />
+          <path d="M8 38 L9 41 L12 42 L9 43 L8 46 L7 43 L4 42 L7 41 Z" fill={fill} stroke="none" opacity={0.4} />
         </svg>
       );
     case "gem":
