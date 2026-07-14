@@ -307,6 +307,8 @@ export function TemplateFrame({ slug, theme }: { slug: string; theme: Theme }) {
     );
   }
 
+  // Template non-midnight: bingkai 4 sisi seperti Midnight Romance,
+  // memakai motif khas tiap template (CornerArt di sudut + CenterMotif di tepi).
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 z-20">
       <div className={`absolute ${cfg.inset} ${cfg.radius}`} style={borderStyle} />
@@ -316,11 +318,49 @@ export function TemplateFrame({ slug, theme }: { slug: string; theme: Theme }) {
           style={{ borderColor: theme.accent, borderWidth: 1, borderStyle: "dotted", opacity: 0.45 }}
         />
       )}
+
+      {/* Keempat sudut */}
       {(["tl", "tr", "bl", "br"] as const).map((p) => (
         <div key={p} className="absolute hidden sm:block" style={POS[p]}>
           <CornerArt slug={s} stroke={theme.primary} fill={theme.accent} />
         </div>
       ))}
+
+      {/* Tepian atas & bawah: motif tengah di garis tepi */}
+      <div
+        className="absolute left-0 right-0 top-1 flex justify-center"
+        style={{ opacity: cfg.opacity }}
+      >
+        <CenterMotif slug={s} stroke={theme.primary} fill={theme.accent} />
+      </div>
+      <div
+        className="absolute bottom-1 left-0 right-0 flex rotate-180 justify-center"
+        style={{ opacity: cfg.opacity }}
+      >
+        <CenterMotif slug={s} stroke={theme.primary} fill={theme.accent} />
+      </div>
+
+      {/* Rel tepi kiri & kanan: motif kecil berulang sepanjang sisi */}
+      <div
+        className="absolute bottom-16 left-1 top-16 flex flex-col items-center justify-around"
+        style={{ opacity: cfg.opacity }}
+      >
+        {[0, 1, 2, 3, 4].map((i) => (
+          <div key={i} className="scale-75">
+            <CenterMotif slug={s} stroke={theme.primary} fill={theme.accent} />
+          </div>
+        ))}
+      </div>
+      <div
+        className="absolute bottom-16 right-1 top-16 flex flex-col items-center justify-around"
+        style={{ opacity: cfg.opacity }}
+      >
+        {[0, 1, 2, 3, 4].map((i) => (
+          <div key={i} className="scale-75">
+            <CenterMotif slug={s} stroke={theme.primary} fill={theme.accent} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
