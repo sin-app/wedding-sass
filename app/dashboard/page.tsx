@@ -44,7 +44,7 @@ export default async function DashboardHome() {
   if (ids.length) {
     const [{ data: rsvpRows }, { data: wishRows }] = await Promise.all([
       supabase
-        .from("rsvp")
+        .from("rsvps")
         .select("invitation_id, attendance")
         .in("invitation_id", ids),
       supabase.from("wishes").select("invitation_id").in("invitation_id", ids),
