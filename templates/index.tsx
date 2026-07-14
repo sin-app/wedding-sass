@@ -30,6 +30,10 @@ export function MeadowTemplate(p: Props) {
   return <BaseTemplate {...p} theme={getTheme("meadow")} />;
 }
 
+export function MidnightTemplate(p: Props) {
+  return <BaseTemplate {...p} theme={getTheme("midnight")} />;
+}
+
 export const TEMPLATE_REGISTRY: Record<string, (p: Props) => JSX.Element> = {
   classic: ClassicTemplate,
   floral: FloralTemplate,
@@ -39,6 +43,7 @@ export const TEMPLATE_REGISTRY: Record<string, (p: Props) => JSX.Element> = {
   boho: BohoTemplate,
   vintage: VintageTemplate,
   meadow: MeadowTemplate,
+  midnight: MidnightTemplate,
 };
 
 export function TemplateRenderer({
