@@ -39,7 +39,7 @@ export function LoginForm() {
           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-400 to-violet-500 shadow-[0_0_18px_rgba(34,211,238,0.5)]">
             <Hexagon className="h-4 w-4 text-slate-950" />
           </span>
-          Wedding<span className="gradient-text">Ku</span>
+          <span className="font-script text-2xl">Wedding<span className="gradient-text">Ku</span></span>
         </Link>
         <div className="glass rounded-2xl p-6 shadow-[0_0_40px_rgba(34,211,238,0.12)]">
           <h1 className="text-xl font-semibold">Masuk</h1>

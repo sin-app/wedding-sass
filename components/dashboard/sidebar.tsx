@@ -38,7 +38,7 @@ export function Sidebar({
         <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-400 to-violet-500 shadow-[0_0_16px_rgba(34,211,238,0.45)]">
           <Heart className="h-4 w-4 text-slate-950" />
         </span>
-        Wedding<span className="gradient-text">Ku</span>
+        <span className="font-script text-2xl">Wedding<span className="gradient-text">Ku</span></span>
       </div>
 
       <Link href="/dashboard/new" className="px-3 md:px-3">
