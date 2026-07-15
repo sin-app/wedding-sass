@@ -41,7 +41,7 @@ export function CardActions({
         {open && (
           <>
             <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
-            <div className="absolute right-0 z-20 mt-2 w-52 overflow-hidden rounded-xl border border-white/10 bg-slate-900/95 p-1 shadow-xl backdrop-blur">
+            <div className="absolute right-0 z-20 mb-2 w-52 overflow-hidden rounded-xl border border-white/10 bg-slate-900/95 p-1 shadow-xl backdrop-blur bottom-full">
               <Link
                 href={`/dashboard/${id}/guests`}
                 className={item}
