@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 import type { TemplateMeta } from "@/config/templates";
 
 export function TemplateCard({ meta }: { meta: TemplateMeta }) {
@@ -10,8 +11,13 @@ export function TemplateCard({ meta }: { meta: TemplateMeta }) {
 
   return (
     <Link href={previewHref} className="group block">
-      <Card className="overflow-hidden border-white/10 bg-white/5 backdrop-blur transition hover:border-cyan-400/40 hover:shadow-[0_0_30px_rgba(34,211,238,0.2)]">
-        <div className="relative aspect-[3/4] overflow-hidden">
+      <Card
+        className={cn(
+          "overflow-hidden border-white/10 bg-white/5 backdrop-blur transition hover:border-cyan-400/40 hover:shadow-[0_0_30px_rgba(34,211,238,0.2)]",
+          meta.premium && "ring-1 ring-amber-300/30"
+        )}
+      >
+        <div className="relative aspect-[16/9] overflow-hidden">
           <Image
             src={meta.preview}
             alt={meta.name}

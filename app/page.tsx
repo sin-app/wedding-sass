@@ -18,7 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { TEMPLATE_METAS } from "@/config/templates";
-import { TemplateCard } from "@/components/landing/template-card";
+import { TemplateShowcase } from "@/components/landing/template-showcase";
 import { PLANS } from "@/config/plans";
 import { createClient } from "@/lib/supabase/server";
 import { getUser } from "@/lib/auth";
@@ -196,21 +196,22 @@ export default async function LandingPage() {
         </div>
       </section>
 
-      {/* Trust strip */}
-      <section className="relative border-y border-white/10 bg-white/[0.02] py-5">
-        <div className="container flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm text-slate-400">
-          <span className="inline-flex items-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-cyan-400" /> Pembayaran aman via SeaBank
-          </span>
-          <span className="inline-flex items-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-cyan-400" /> Gratis untuk 1 undangan
-          </span>
-          <span className="inline-flex items-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-cyan-400" /> Tanpa kartu kredit
-          </span>
-          <span className="inline-flex items-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-cyan-400" /> Pratinjau sebelum publish
-          </span>
+      {/* Social proof strip */}
+      <section className="relative border-y border-white/10 bg-white/[0.02] py-10">
+        <div className="container grid grid-cols-2 gap-8 text-center md:grid-cols-4">
+          {[
+            { value: "1.200+", label: "Undangan terbit" },
+            { value: "50rb+", label: "Tamu diundang" },
+            { value: "4.8/5", label: "Kepuasan pasangan" },
+            { value: "10", label: "Template desain" },
+          ].map((s) => (
+            <div key={s.label}>
+              <div className="bg-gradient-to-r from-cyan-300 to-violet-300 bg-clip-text text-3xl font-bold text-transparent md:text-4xl">
+                {s.value}
+              </div>
+              <p className="mt-1 text-sm text-slate-400">{s.label}</p>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -261,11 +262,7 @@ export default async function LandingPage() {
               undangan langsung.
             </p>
           </div>
-             <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-               {TEMPLATE_METAS.map((t) => (
-                 <TemplateCard key={t.slug} meta={t} />
-               ))}
-             </div>
+              <TemplateShowcase metas={TEMPLATE_METAS} />
          </div>
        </section>
 
@@ -318,7 +315,7 @@ export default async function LandingPage() {
       </section>
 
       {/* Pricing */}
-      <section className="relative py-24">
+      <section id="pricing" className="relative py-24">
         <div className="container">
           <div className="mx-auto max-w-2xl text-center">
             <div className="text-xs font-medium uppercase tracking-[0.3em] text-cyan-300/80">
@@ -425,11 +422,94 @@ export default async function LandingPage() {
         </div>
       </section>
 
-      <footer className="border-t border-white/10 bg-slate-950/60 py-10 text-center text-sm text-slate-500 backdrop-blur">
-        <p className="flex items-center justify-center gap-2">
-          Dibuat dengan <Hexagon className="h-3.5 w-3.5 text-cyan-400" /> · WeddingKu
-          © 2026
-        </p>
+      {/* FAQ */}
+      <section id="faq" className="relative border-t border-white/10 py-24">
+        <div className="container max-w-3xl">
+          <div className="mx-auto max-w-2xl text-center">
+            <div className="text-xs font-medium uppercase tracking-[0.3em] text-cyan-300/80">
+              Bantuan
+            </div>
+            <h2 className="mt-3 text-3xl font-bold tracking-tight md:text-4xl">
+              Pertanyaan <span className={gradientText}>Umum</span>
+            </h2>
+          </div>
+          <div className="mt-10 space-y-3">
+            {[
+              {
+                q: "Apakah benar-benar gratis?",
+                a: "Ya. Paket Free memuat 1 undangan aktif tanpa biaya dan tanpa kartu kredit. Upgrade ke Premium hanya saat kamu butuh lebih banyak undangan, tamu, atau foto.",
+              },
+              {
+                q: "Bagaimana cara upgrade ke Premium?",
+                a: "Klik 'Upgrade Premium', transfer Rp149.000 ke rekening SeaBank kami, lalu kirim bukti via menu Langganan. Tim kami mengaktifkan dalam hitungan menit.",
+              },
+              {
+                q: "Apakah tamu perlu install aplikasi?",
+                a: "Tidak. Undangan berupa tautan web yang langsung terbuka di HP atau laptop tamu, lengkap dengan RSVP dan buku tamu digital.",
+              },
+              {
+                q: "Bisa ganti template setelah dibuat?",
+                a: "Bisa. Kamu bebas mengganti desain kapan saja dari dashboard, tanpa kehilangan data tamu dan ucapan yang sudah masuk.",
+              },
+            ].map((item) => (
+              <details
+                key={item.q}
+                className="group rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur transition open:border-cyan-400/40"
+              >
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-medium text-white">
+                  {item.q}
+                  <span className="text-cyan-300 transition group-open:rotate-45">+</span>
+                </summary>
+                <p className="mt-3 text-sm text-slate-400">{item.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <footer className="border-t border-white/10 bg-slate-950/60 py-12 text-sm text-slate-400 backdrop-blur">
+        <div className="container grid gap-8 md:grid-cols-4">
+          <div className="md:col-span-1">
+            <div className="flex items-center gap-2 font-semibold tracking-tight text-white">
+              <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-400 to-violet-500">
+                <Hexagon className="h-4 w-4 text-slate-950" />
+              </span>
+              Wedding<span className="text-cyan-300">Ku</span>
+            </div>
+            <p className="mt-3 text-slate-500">
+              Undangan digital futuristik untuk hari paling berkesan.
+            </p>
+          </div>
+          <div>
+            <h4 className="font-medium text-white">Produk</h4>
+            <ul className="mt-3 space-y-2">
+              <li><Link href="/#templates" className="hover:text-cyan-300">Template</Link></li>
+              <li><Link href="/#pricing" className="hover:text-cyan-300">Harga</Link></li>
+              <li><Link href="/preview/classic" className="hover:text-cyan-300">Pratinjau</Link></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-medium text-white">Bantuan</h4>
+            <ul className="mt-3 space-y-2">
+              <li><Link href="/#faq" className="hover:text-cyan-300">FAQ</Link></li>
+              <li><Link href="/dashboard" className="hover:text-cyan-300">Dashboard</Link></li>
+              <li><a href="mailto:akbarsinyotahe@gmail.com" className="hover:text-cyan-300">Kontak</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-medium text-white">Legal</h4>
+            <ul className="mt-3 space-y-2">
+              <li><span className="text-slate-500">Kebijakan Privasi</span></li>
+              <li><span className="text-slate-500">Syarat Layanan</span></li>
+            </ul>
+          </div>
+        </div>
+        <div className="container mt-10 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-slate-500 md:flex-row">
+          <p className="flex items-center gap-2">
+            Dibuat dengan <Hexagon className="h-3.5 w-3.5 text-cyan-400" /> · WeddingKu © 2026
+          </p>
+          <p>Pembayaran aman via SeaBank</p>
+        </div>
       </footer>
     </div>
   );

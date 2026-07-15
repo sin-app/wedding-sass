@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Plus, Pencil, ExternalLink, Users, Eye, BarChart3, MessageSquareHeart, Crown, PenLine, Send } from "lucide-react";
+import { Plus, Users, Eye, MessageSquareHeart, Crown, PenLine, Send } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { requireUser } from "@/lib/auth";
 import { getLimits } from "@/config/plans";
@@ -8,8 +8,7 @@ import { getTemplateMeta } from "@/config/templates";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CopyLinkButton } from "@/components/copy-link-button";
-import { PublishToggle } from "@/components/dashboard/publish-toggle";
+import { CardActions } from "@/components/dashboard/card-actions";
 import type { Invitation, TemplateRow } from "@/lib/types";
 
 export default async function DashboardHome() {
@@ -29,8 +28,6 @@ export default async function DashboardHome() {
   const list = (invitations as Invitation[]) ?? [];
   const limits = getLimits(subscription?.plan ?? "free");
   const canCreate = list.length < limits.maxInvitations;
-
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "";
   const used = list.length;
   const pct = limits.maxInvitations
     ? Math.min(100, Math.round((used / limits.maxInvitations) * 100))
@@ -82,8 +79,18 @@ export default async function DashboardHome() {
             </div>
             <p className="mt-2 text-xs text-muted-foreground">
               {used} dari {limits.maxInvitations} undangan terpakai
-              {!isPremium && " · maks " + limits.maxGuests + " tamu, " + limits.maxPhotos + " foto"}
             </p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <span className="rounded-md bg-white/5 px-2.5 py-1 text-xs text-slate-300">
+                Tamu maks {limits.maxGuests}
+              </span>
+              <span className="rounded-md bg-white/5 px-2.5 py-1 text-xs text-slate-300">
+                Foto maks {limits.maxPhotos}
+              </span>
+              <span className="rounded-md bg-white/5 px-2.5 py-1 text-xs text-slate-300">
+                {isPremium ? "Tanpa watermark" : "Dengan watermark"}
+              </span>
+            </div>
           </div>
           <div className="flex items-center gap-2">
             {canCreate ? (
@@ -139,15 +146,14 @@ export default async function DashboardHome() {
           </CardContent>
         </Card>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {list.map((inv) => {
             const meta = getTemplateMeta(templateName(inv.template_id) || "");
             const cover = inv.data?.hero?.background;
-            const shareUrl = `${siteUrl}/i/${inv.slug}`;
             const published = inv.status === "published";
             return (
               <Card key={inv.id} className="overflow-hidden border-white/10 bg-white/5">
-                <div className="relative aspect-[16/7] w-full overflow-hidden">
+                <div className="relative aspect-[16/9] w-full overflow-hidden">
                   {cover ? (
                     <Image
                       src={cover}
@@ -184,32 +190,7 @@ export default async function DashboardHome() {
                   </div>
 
                   <div className="mt-4 flex flex-wrap gap-2">
-                    <Link href={`/dashboard/${inv.id}/edit`}>
-                      <Button size="sm" variant="outline">
-                        <Pencil className="h-4 w-4" /> Edit
-                      </Button>
-                    </Link>
-                    <Link href={`/dashboard/${inv.id}/guests`}>
-                      <Button size="sm" variant="outline">
-                        <Users className="h-4 w-4" /> Tamu
-                      </Button>
-                    </Link>
-                    <Link href={`/dashboard/${inv.id}/rsvp`}>
-                      <Button size="sm" variant="outline">
-                        <BarChart3 className="h-4 w-4" /> Rekap
-                      </Button>
-                    </Link>
-                    {published && (
-                      <Link href={`/i/${inv.slug}`} target="_blank">
-                        <Button size="sm" variant="ghost">
-                          <ExternalLink className="h-4 w-4" /> Lihat
-                        </Button>
-                      </Link>
-                    )}
-                  </div>
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    <CopyLinkButton url={shareUrl} />
-                    <PublishToggle id={inv.id} published={published} />
+                    <CardActions id={inv.id} slug={inv.slug} published={published} />
                   </div>
                 </CardContent>
               </Card>

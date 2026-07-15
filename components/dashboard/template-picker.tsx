@@ -35,7 +35,7 @@ export function TemplatePicker({ allTemplates }: { allTemplates: boolean }) {
           const locked = t.premium && !allTemplates;
           return (
             <Card key={t.slug} className="overflow-hidden">
-              <div className="relative aspect-[3/4]">
+              <div className="relative aspect-[16/9]">
                 <Image
                   src={t.preview}
                   alt={t.name}

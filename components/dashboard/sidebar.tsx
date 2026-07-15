@@ -2,16 +2,19 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { motion } from "framer-motion";
 import {
   LayoutDashboard,
   CreditCard,
   Shield,
   Heart,
   LogOut,
+  Plus,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { logout } from "@/app/(auth)/actions";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 const nav = [
   { href: "/dashboard", label: "Undangan", icon: LayoutDashboard },
@@ -38,6 +41,12 @@ export function Sidebar({
         Wedding<span className="gradient-text">Ku</span>
       </div>
 
+      <Link href="/dashboard/new" className="px-3 md:px-3">
+        <Button className="w-full border border-cyan-400/50 bg-gradient-to-r from-cyan-500 to-violet-500 text-white shadow-[0_0_24px_rgba(34,211,238,0.35)]">
+          <Plus className="h-4 w-4" /> Buat Undangan
+        </Button>
+      </Link>
+
       <nav className="flex gap-1 px-2 md:flex-col md:px-3">
         {nav.map((item) => {
           const active =
@@ -50,14 +59,21 @@ export function Sidebar({
               href={item.href}
               title={item.label}
               className={cn(
-                "flex flex-1 items-center justify-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors md:flex-none md:justify-start",
+                "relative flex flex-1 items-center justify-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors md:flex-none md:justify-start",
                 active
-                  ? "bg-cyan-500/15 text-cyan-200 ring-1 ring-cyan-400/30"
+                  ? "text-cyan-200"
                   : "text-slate-400 hover:bg-white/5 hover:text-slate-100"
               )}
             >
-              <item.icon className="h-4 w-4" />
-              <span className="hidden md:inline">{item.label}</span>
+              {active && (
+                <motion.span
+                  layoutId="navActive"
+                  className="absolute inset-0 rounded-lg bg-cyan-500/15 ring-1 ring-cyan-400/30"
+                  transition={{ type: "spring", stiffness: 400, damping: 32 }}
+                />
+              )}
+              <item.icon className="relative z-10 h-4 w-4" />
+              <span className="relative z-10 hidden md:inline">{item.label}</span>
             </Link>
           );
         })}
@@ -66,14 +82,21 @@ export function Sidebar({
             href="/admin"
             title="Admin"
             className={cn(
-              "flex flex-1 items-center justify-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors md:flex-none md:justify-start",
+              "relative flex flex-1 items-center justify-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors md:flex-none md:justify-start",
               pathname.startsWith("/admin")
-                ? "bg-cyan-500/15 text-cyan-200 ring-1 ring-cyan-400/30"
+                ? "text-cyan-200"
                 : "text-slate-400 hover:bg-white/5 hover:text-slate-100"
             )}
           >
-            <Shield className="h-4 w-4" />
-            <span className="hidden md:inline">Admin</span>
+            {pathname.startsWith("/admin") && (
+              <motion.span
+                layoutId="navActive"
+                className="absolute inset-0 rounded-lg bg-cyan-500/15 ring-1 ring-cyan-400/30"
+                transition={{ type: "spring", stiffness: 400, damping: 32 }}
+              />
+            )}
+            <Shield className="relative z-10 h-4 w-4" />
+            <span className="relative z-10 hidden md:inline">Admin</span>
           </Link>
         )}
       </nav>

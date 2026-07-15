@@ -3,19 +3,23 @@
 import { useState } from "react";
 import { Copy, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export function CopyLinkButton({
   url,
   label = "Salin Link",
+  className,
 }: {
   url: string;
   label?: string;
+  className?: string;
 }) {
   const [copied, setCopied] = useState(false);
   return (
     <Button
       size="sm"
       variant="outline"
+      className={cn(className)}
       onClick={async () => {
         try {
           await navigator.clipboard.writeText(url);
