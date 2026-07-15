@@ -43,7 +43,7 @@ export function LoginForm() {
         </Link>
         <div className="glass rounded-2xl p-6 shadow-[0_0_40px_rgba(34,211,238,0.12)]">
           <h1 className="text-xl font-semibold">Masuk</h1>
-          <p className="mb-4 text-sm text-slate-400">
+          <p className="mb-4 text-sm text-slate-300">
             Selamat datang kembali.
           </p>
           <form action={action} className="space-y-4">
@@ -77,7 +77,7 @@ export function LoginForm() {
             )}
             <Submit />
           </form>
-          <p className="mt-4 text-center text-sm text-slate-400">
+          <p className="mt-4 text-center text-sm text-slate-300">
             Belum punya akun?{" "}
             <Link href="/register" className="text-cyan-300 hover:underline">
               Daftar

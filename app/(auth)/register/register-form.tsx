@@ -40,7 +40,7 @@ export function RegisterForm() {
         </Link>
         <div className="glass rounded-2xl p-6 shadow-[0_0_40px_rgba(34,211,238,0.12)]">
           <h1 className="text-xl font-semibold">Buat Akun</h1>
-          <p className="mb-4 text-sm text-slate-400">
+          <p className="mb-4 text-sm text-slate-300">
             Gratis, mulai buat undangan pertamamu.
           </p>
           <form action={action} className="space-y-4">
@@ -85,7 +85,7 @@ export function RegisterForm() {
             )}
             <Submit />
           </form>
-          <p className="mt-4 text-center text-sm text-slate-400">
+          <p className="mt-4 text-center text-sm text-slate-300">
             Sudah punya akun?{" "}
             <Link href="/login" className="text-cyan-300 hover:underline">
               Masuk

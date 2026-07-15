@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { TEMPLATE_METAS } from "@/config/templates";
 import { TemplateShowcase } from "@/components/landing/template-showcase";
+import { Reveal } from "@/components/landing/reveal";
 import { PLANS } from "@/config/plans";
 import { createClient } from "@/lib/supabase/server";
 import { getUser } from "@/lib/auth";
@@ -46,25 +47,32 @@ const gradientText =
 
 const TESTIMONIALS = [
   {
-    name: "Pasangan Baru",
+    name: "Pasangan Contoh A",
     role: "Pengantin · Jakarta",
     quote:
       "Undangan selesai kurang dari 5 menit. Tamu kagum dengan desainnya.",
-    initials: "PB",
+    initials: "PA",
   },
   {
-    name: "N & R",
+    name: "Pasangan Contoh B",
     role: "Pengantin · Bandung",
     quote:
       "Fitur RSVP real-time sangat membantu saat menyusun tempat duduk.",
-    initials: "NR",
+    initials: "PB",
   },
   {
-    name: "Keluarga Bahagia",
-    role: "Orang Tua Pengantin · Surabaya",
+    name: "Pasangan Contoh C",
+    role: "Pengantin · Surabaya",
     quote:
       "Sangat gampang dibagikan ke keluarga, tinggal kirim tautan.",
-    initials: "KB",
+    initials: "PC",
+  },
+  {
+    name: "Pasangan Contoh D",
+    role: "Pengantin · Yogyakarta",
+    quote:
+      "Tampilannya elegan, tamu mengira undangan dibuat oleh vendor mahal.",
+    initials: "PD",
   },
 ];
 
@@ -211,7 +219,7 @@ export default async function LandingPage() {
                 <div className={`text-2xl font-bold md:text-3xl ${gradientText}`}>
                   {s.v}
                 </div>
-                <div className="mt-1 text-xs uppercase tracking-wider text-slate-400">
+                <div className="mt-1 text-xs uppercase tracking-wider text-slate-300">
                   {s.l}
                 </div>
               </div>
@@ -233,7 +241,7 @@ export default async function LandingPage() {
               <div className="bg-gradient-to-r from-cyan-300 to-violet-300 bg-clip-text text-3xl font-bold text-transparent md:text-4xl">
                 {s.value}
               </div>
-              <p className="mt-1 text-sm text-slate-400">{s.label}</p>
+              <p className="mt-1 text-sm text-slate-300">{s.label}</p>
             </div>
           ))}
         </div>
@@ -241,6 +249,7 @@ export default async function LandingPage() {
 
       {/* Features */}
       <section className="relative border-y border-white/10 bg-white/[0.02] py-24">
+        <Reveal>
         <div className="container">
           <div className="mx-auto max-w-2xl text-center">
             <div className="font-script text-lg text-cyan-300/90">
@@ -249,7 +258,7 @@ export default async function LandingPage() {
             <h2 className="mt-3 font-serif text-3xl font-bold tracking-tight md:text-4xl">
               Semua yang Kamu Butuhkan, <span className={gradientText}>Terangkum</span>
             </h2>
-            <p className="mt-3 text-slate-400">
+            <p className="mt-3 text-slate-300">
               Dari desain hingga konfirmasi kehadiran — dibangun agar kamu fokus
               menikmati hari spesial.
             </p>
@@ -264,15 +273,17 @@ export default async function LandingPage() {
                   <Icon className="h-6 w-6 text-cyan-300" />
                 </div>
                 <h3 className="mt-4 font-semibold text-white">{title}</h3>
-                <p className="mt-2 text-sm text-slate-400">{text}</p>
+                <p className="mt-2 text-sm text-slate-300">{text}</p>
               </div>
             ))}
           </div>
         </div>
+      </Reveal>
       </section>
 
       {/* Templates */}
       <section id="templates" className="relative py-24">
+        <Reveal>
         <div className="container">
           <div className="mx-auto max-w-2xl text-center">
             <div className="font-script text-lg text-cyan-300/90">
@@ -281,18 +292,20 @@ export default async function LandingPage() {
             <h2 className="mt-3 font-serif text-3xl font-bold tracking-tight md:text-4xl">
               Pilihan <span className={gradientText}>Template</span>
             </h2>
-            <p className="mt-3 text-slate-400">
+            <p className="mt-3 text-slate-300">
               10 desain futuristik siap pakai. Klik mana saja untuk melihat contoh
               undangan langsung.
             </p>
           </div>
               <TemplateShowcase metas={TEMPLATE_METAS} />
          </div>
-       </section>
+       </Reveal>
+      </section>
 
       {/* How it works */}
       <section className="relative border-t border-white/10 py-24">
         <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-transparent via-cyan-950/20 to-transparent" />
+        <Reveal>
         <div className="container">
           <div className="mx-auto max-w-2xl text-center">
             <div className="font-script text-lg text-violet-300/90">
@@ -331,15 +344,17 @@ export default async function LandingPage() {
                   </span>
                 </div>
                 <h3 className="mt-4 font-semibold text-white">{title}</h3>
-                <p className="mt-2 text-sm text-slate-400">{text}</p>
+                <p className="mt-2 text-sm text-slate-300">{text}</p>
               </div>
             ))}
           </div>
         </div>
+      </Reveal>
       </section>
 
       {/* Pricing */}
       <section id="pricing" className="relative py-24">
+        <Reveal>
         <div className="container">
           <div className="mx-auto max-w-2xl text-center">
             <div className="font-script text-lg text-cyan-300/90">
@@ -348,7 +363,7 @@ export default async function LandingPage() {
             <h2 className="mt-3 font-serif text-3xl font-bold tracking-tight md:text-4xl">
               Harga <span className={gradientText}>Transparan</span>
             </h2>
-            <p className="mt-3 text-slate-400">
+            <p className="mt-3 text-slate-300">
               Mulai gratis, tingkatkan hanya saat kamu butuh lebih banyak.
             </p>
           </div>
@@ -374,7 +389,7 @@ export default async function LandingPage() {
                     <h3 className="text-xl font-semibold text-white">{p.label}</h3>
                     <p className="mt-2 text-3xl font-bold">
                       <span className={gradientText}>{p.price}</span>
-                      <span className="text-sm font-normal text-slate-400">
+                      <span className="text-sm font-normal text-slate-300">
                         {premium ? "/event" : ""}
                       </span>
                     </p>
@@ -418,10 +433,12 @@ export default async function LandingPage() {
             })}
           </div>
         </div>
+      </Reveal>
       </section>
 
       {/* Testimoni */}
       <section className="relative border-t border-white/10 py-24">
+        <Reveal>
         <div className="container">
           <div className="mx-auto max-w-2xl text-center">
             <div className="font-script text-lg text-cyan-300/90">Kata Mereka</div>
@@ -446,13 +463,14 @@ export default async function LandingPage() {
                     <span className="block text-sm font-medium text-white">
                       {t.name}
                     </span>
-                    <span className="block text-xs text-slate-400">{t.role}</span>
+                    <span className="block text-xs text-slate-300">{t.role}</span>
                   </span>
                 </figcaption>
               </figure>
             ))}
           </div>
         </div>
+      </Reveal>
       </section>
 
       {/* CTA */}
@@ -465,7 +483,7 @@ export default async function LandingPage() {
             Siap Membangun Undangan
             <span className={gradientText}> Masa Depanmu?</span>
           </h2>
-          <p className="mx-auto mt-4 max-w-md text-slate-400">
+          <p className="mx-auto mt-4 max-w-md text-slate-300">
             Buat undangan pertamamu secara gratis dalam beberapa menit.
           </p>
           <div className="mt-9 flex justify-center">
@@ -483,6 +501,7 @@ export default async function LandingPage() {
 
       {/* FAQ */}
       <section id="faq" className="relative border-t border-white/10 py-24">
+        <Reveal>
         <div className="container max-w-3xl">
           <div className="mx-auto max-w-2xl text-center">
             <div className="font-script text-lg text-cyan-300/90">
@@ -519,14 +538,15 @@ export default async function LandingPage() {
                   {item.q}
                   <span className="text-cyan-300 transition group-open:rotate-45">+</span>
                 </summary>
-                <p className="mt-3 text-sm text-slate-400">{item.a}</p>
+                <p className="mt-3 text-sm text-slate-300">{item.a}</p>
               </details>
             ))}
           </div>
         </div>
+      </Reveal>
       </section>
 
-      <footer className="border-t border-white/10 bg-slate-950/60 py-12 text-sm text-slate-400 backdrop-blur">
+      <footer className="border-t border-white/10 bg-slate-950/60 py-12 text-sm text-slate-300 backdrop-blur">
         <div className="container grid gap-8 md:grid-cols-4">
           <div className="md:col-span-1">
             <div className="flex items-center gap-2 font-semibold tracking-tight text-white">
