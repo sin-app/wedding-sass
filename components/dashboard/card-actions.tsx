@@ -27,17 +27,16 @@ export function CardActions({
   useEffect(() => {
     if (!open || !btnRef.current) return;
     const r = btnRef.current.getBoundingClientRect();
-    const menuW = 208;
     const menuH = 232;
     const vh = window.innerHeight;
-    const vw = window.innerWidth;
-    // Default: drop below the button, hugging its right edge.
+    // Always pin to the right screen edge so it never gets obstructed
+    // or pushed off-screen on narrow mobile views.
+    const right = 12;
+    // Default: drop below the button.
     let top = r.bottom + 8;
     if (top + menuH > vh - 8) top = r.top - menuH - 8; // flip up if no room below
     // Clamp fully inside the viewport (never hidden top/bottom).
     top = Math.max(8, Math.min(top, vh - menuH - 8));
-    // Hug the right side; clamp so it never runs off the left edge.
-    const right = Math.max(8, Math.min(window.innerWidth - r.right, vw - menuW - 8));
     setPos({ top, right });
   }, [open]);
 
@@ -69,7 +68,7 @@ export function CardActions({
               onClick={() => setOpen(false)}
             />
             <div
-              className="fixed z-50 w-52 overflow-hidden rounded-xl border border-white/10 bg-slate-900/95 p-1 shadow-xl backdrop-blur"
+              className="fixed z-[60] w-52 overflow-hidden rounded-xl border border-white/10 bg-slate-900/95 p-1 shadow-xl backdrop-blur"
               style={{ top: pos?.top ?? 0, right: pos?.right ?? 0 }}
             >
               <Link
