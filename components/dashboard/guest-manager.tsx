@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 import {
   Plus,
   Trash2,
@@ -9,6 +9,8 @@ import {
   MessageCircle,
   Upload,
   Users,
+  Download,
+  Search,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -37,6 +39,9 @@ export function GuestManager({
   const [single, setSingle] = useState("");
   const [bulk, setBulk] = useState("");
   const [copied, setCopied] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState<"all" | "opened" | "unopened">("all");
+  const fileRef = useRef<HTMLInputElement>(null);
 
   const linkFor = (g: Guest) =>
     `${siteUrl}/i/${slug}?g=${g.token}`;
@@ -73,6 +78,50 @@ export function GuestManager({
     startTransition(async () => {
       await deleteGuest(invitationId, id);
     });
+
+  const filtered = guests.filter((g) => {
+    if (search && !g.name.toLowerCase().includes(search.toLowerCase())) return false;
+    if (statusFilter === "opened" && !g.opened) return false;
+    if (statusFilter === "unopened" && g.opened) return false;
+    return true;
+  });
+
+  const exportCsv = () => {
+    const rows = [["Nama", "Status", "Token"]];
+    guests.forEach((g) =>
+      rows.push([g.name, g.opened ? "Dibuka" : "Belum", g.token])
+    );
+    const csv = rows
+      .map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(","))
+      .join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "tamu.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const importCsv = (file: File) => {
+    const reader = new FileReader();
+    reader.onload = async () => {
+      const text = String(reader.result || "");
+      const names: string[] = [];
+      for (const line of text.split(/\r?\n/)) {
+        const first = (line.split(",")[0] || "").trim();
+        if (!first || first.toLowerCase().startsWith("nama")) continue;
+        names.push(first);
+      }
+      if (!names.length) {
+        setMsg("Tidak ada nama valid di CSV.");
+        return;
+      }
+      const res = await addGuests(invitationId, names);
+      setMsg(res.message || `Impor ${names.length} nama`);
+    };
+    reader.readAsText(file);
+  };
 
   return (
     <div className="grid gap-6 lg:grid-cols-[360px_1fr]">
@@ -115,6 +164,25 @@ export function GuestManager({
             >
               Import Daftar
             </Button>
+            <input
+              ref={fileRef}
+              type="file"
+              accept=".csv,text/csv"
+              className="hidden"
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) importCsv(f);
+                e.target.value = "";
+              }}
+            />
+            <Button
+              className="w-full"
+              variant="ghost"
+              onClick={() => fileRef.current?.click()}
+              disabled={pending}
+            >
+              <Upload className="h-4 w-4" /> Impor dari CSV
+            </Button>
           </CardContent>
         </Card>
         {msg && <p className="text-sm text-muted-foreground">{msg}</p>}
@@ -122,22 +190,59 @@ export function GuestManager({
 
       <Card>
         <CardContent className="pt-6">
-          <div className="mb-4 flex items-center justify-between">
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
             <h3 className="flex items-center gap-2 font-medium">
               <Users className="h-4 w-4" /> Daftar Tamu
             </h3>
-            <span className="text-sm text-muted-foreground">
-              {guests.length} / {maxGuests}
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-muted-foreground">
+                {filtered.length} / {guests.length}
+              </span>
+              <Button size="sm" variant="outline" onClick={exportCsv} disabled={!guests.length}>
+                <Download className="h-4 w-4" /> CSV
+              </Button>
+            </div>
+          </div>
+
+          <div className="mb-4 flex flex-wrap gap-2">
+            <div className="relative flex-1 min-w-[180px]">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                placeholder="Cari nama tamu"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="pl-9"
+              />
+            </div>
+            <div className="flex gap-1">
+              {([
+                ["all", "Semua"],
+                ["opened", "Dibuka"],
+                ["unopened", "Belum"],
+              ] as const).map(([val, label]) => (
+                <Button
+                  key={val}
+                  size="sm"
+                  variant={statusFilter === val ? "default" : "outline"}
+                  onClick={() => setStatusFilter(val)}
+                >
+                  {label}
+                </Button>
+              ))}
+            </div>
           </div>
 
           {guests.length === 0 ? (
             <p className="py-8 text-center text-sm text-muted-foreground">
               Belum ada tamu.
             </p>
+          ) : filtered.length === 0 ? (
+            <p className="py-8 text-center text-sm text-muted-foreground">
+              Tidak ada tamu yang cocok.
+            </p>
           ) : (
             <div className="space-y-2">
-              {guests.map((g) => (
+              {filtered.map((g) => (
                 <div
                   key={g.id}
                   className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-border p-3"

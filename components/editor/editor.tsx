@@ -1,9 +1,11 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useRef, useTransition } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
+  ArrowUp,
+  ArrowDown,
   Plus,
   Trash2,
   Save,
@@ -11,6 +13,8 @@ import {
   EyeOff,
   Eye,
   Pencil,
+  Share2,
+  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,6 +29,7 @@ import {
   deleteInvitation,
 } from "@/app/dashboard/actions";
 import type { Invitation, InvitationData } from "@/lib/types";
+import { SharePanel } from "@/components/share/share-panel";
 
 type Tab = "edit" | "preview";
 
@@ -73,6 +78,8 @@ export function Editor({
   const [data, setData] = useState<InvitationData>(invitation.data);
   const [status, setStatus] = useState(invitation.status);
   const [msg, setMsg] = useState<string | null>(null);
+  const [shareOpen, setShareOpen] = useState(false);
+  const publicUrl = `${siteUrl}/i/${slug}`;
   const [pending, startTransition] = useTransition();
 
   const set = (patch: Partial<InvitationData>) =>
@@ -97,6 +104,37 @@ export function Editor({
     startTransition(async () => {
       await deleteInvitation(invitation.id);
     });
+  };
+
+  const firstRender = useRef(true);
+  useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+      return;
+    }
+    const t = setTimeout(() => {
+      saveInvitation(invitation.id, { title, slug, data }).then((res) => {
+        if (res.ok) setMsg("Tersimpan otomatis");
+      });
+    }, 1200);
+    return () => clearTimeout(t);
+  }, [data, title, slug, invitation.id]);
+
+  const moveItem = <K extends "events" | "story" | "gallery">(
+    key: K,
+    i: number,
+    dir: -1 | 1
+  ) =>
+    setData((d) => {
+      const arr = [...(d[key] as unknown as unknown[])];
+      const j = i + dir;
+      if (j < 0 || j >= arr.length) return d;
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+      return { ...d, [key]: arr } as InvitationData;
+    });
+
+  const confirmRemove = (fn: () => void) => {
+    if (confirm("Hapus item ini? Tindakan tidak bisa dibatalkan.")) fn();
   };
 
   return (
@@ -128,6 +166,26 @@ export function Editor({
           <Button size="sm" onClick={save} disabled={pending}>
             <Save className="h-4 w-4" /> {pending ? "Menyimpan..." : "Simpan"}
           </Button>
+          <div className="relative">
+            <Button size="sm" variant="outline" onClick={() => setShareOpen((v) => !v)}>
+              <Share2 className="h-4 w-4" /> Bagikan
+            </Button>
+            {shareOpen && (
+              <div className="absolute right-0 z-50 mt-2 w-[260px] rounded-xl border border-border bg-card p-4 shadow-xl">
+                <div className="mb-2 flex items-center justify-between">
+                  <span className="text-sm font-medium">Bagikan</span>
+                  <button
+                    onClick={() => setShareOpen(false)}
+                    aria-label="Tutup"
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+                <SharePanel url={publicUrl} />
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -270,14 +328,34 @@ export function Editor({
               <div key={i} className="space-y-2 rounded-lg border border-border p-3">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium">Acara {i + 1}</span>
-                  <button
-                    onClick={() =>
-                      set({ events: data.events.filter((_, x) => x !== i) })
-                    }
-                    className="text-destructive"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={() => moveItem("events", i, -1)}
+                      disabled={i === 0}
+                      className="text-muted-foreground hover:text-foreground disabled:opacity-30"
+                      aria-label="Atur ke atas"
+                    >
+                      <ArrowUp className="h-4 w-4" />
+                    </button>
+                    <button
+                      onClick={() => moveItem("events", i, 1)}
+                      disabled={i === data.events.length - 1}
+                      className="text-muted-foreground hover:text-foreground disabled:opacity-30"
+                      aria-label="Atur ke bawah"
+                    >
+                      <ArrowDown className="h-4 w-4" />
+                    </button>
+                    <button
+                      onClick={() =>
+                        confirmRemove(() =>
+                          set({ events: data.events.filter((_, x) => x !== i) })
+                        )
+                      }
+                      className="text-destructive"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
                 </div>
                 {(["name", "date", "time", "venue", "address"] as const).map((k) => (
                   <Input
@@ -325,12 +403,34 @@ export function Editor({
               <div key={i} className="space-y-2 rounded-lg border border-border p-3">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium">Momen {i + 1}</span>
-                  <button
-                    onClick={() => set({ story: data.story.filter((_, x) => x !== i) })}
-                    className="text-destructive"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={() => moveItem("story", i, -1)}
+                      disabled={i === 0}
+                      className="text-muted-foreground hover:text-foreground disabled:opacity-30"
+                      aria-label="Atur ke atas"
+                    >
+                      <ArrowUp className="h-4 w-4" />
+                    </button>
+                    <button
+                      onClick={() => moveItem("story", i, 1)}
+                      disabled={i === data.story.length - 1}
+                      className="text-muted-foreground hover:text-foreground disabled:opacity-30"
+                      aria-label="Atur ke bawah"
+                    >
+                      <ArrowDown className="h-4 w-4" />
+                    </button>
+                    <button
+                      onClick={() =>
+                        confirmRemove(() =>
+                          set({ story: data.story.filter((_, x) => x !== i) })
+                        )
+                      }
+                      className="text-destructive"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
                 </div>
                 <Input
                   placeholder="tahun / tanggal"
@@ -376,6 +476,24 @@ export function Editor({
           <Group title="Galeri Foto">
             {data.gallery.map((g, i) => (
               <div key={i} className="flex items-start gap-2">
+                <div className="flex flex-col gap-1 pt-2">
+                  <button
+                    onClick={() => moveItem("gallery", i, -1)}
+                    disabled={i === 0}
+                    className="text-muted-foreground hover:text-foreground disabled:opacity-30"
+                    aria-label="Atur ke atas"
+                  >
+                    <ArrowUp className="h-4 w-4" />
+                  </button>
+                  <button
+                    onClick={() => moveItem("gallery", i, 1)}
+                    disabled={i === data.gallery.length - 1}
+                    className="text-muted-foreground hover:text-foreground disabled:opacity-30"
+                    aria-label="Atur ke bawah"
+                  >
+                    <ArrowDown className="h-4 w-4" />
+                  </button>
+                </div>
                 <div className="flex-1">
                   <ImageInput
                     value={g}
@@ -388,7 +506,11 @@ export function Editor({
                   />
                 </div>
                 <button
-                  onClick={() => set({ gallery: data.gallery.filter((_, x) => x !== i) })}
+                  onClick={() =>
+                    confirmRemove(() =>
+                      set({ gallery: data.gallery.filter((_, x) => x !== i) })
+                    )
+                  }
                   className="mt-2 text-destructive"
                 >
                   <Trash2 className="h-4 w-4" />
@@ -412,12 +534,14 @@ export function Editor({
                   <span className="text-sm font-medium">Rekening {i + 1}</span>
                   <button
                     onClick={() =>
-                      set({
-                        gift: {
-                          ...data.gift,
-                          banks: data.gift.banks.filter((_, x) => x !== i),
-                        },
-                      })
+                      confirmRemove(() =>
+                        set({
+                          gift: {
+                            ...data.gift,
+                            banks: data.gift.banks.filter((_, x) => x !== i),
+                          },
+                        })
+                      )
                     }
                     className="text-destructive"
                   >

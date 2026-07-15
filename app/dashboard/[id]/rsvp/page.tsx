@@ -77,6 +77,10 @@ export default async function RsvpRecapPage({
 
   const list = (rsvps as Rsvp[]) ?? [];
   const hadir = list.filter((r) => r.attendance === "hadir");
+  const ragu = list.filter((r) => r.attendance === "ragu");
+  const tidak = list.filter((r) => r.attendance === "tidak");
+  const totalRsvp = list.length || 1;
+  const pct = (n: number) => Math.round((n / totalRsvp) * 100);
   const totalTamu = hadir.reduce((a, r) => a + (r.guest_count || 0), 0);
   const rate = list.length
     ? Math.round((hadir.length / list.length) * 100)
@@ -105,6 +109,37 @@ export default async function RsvpRecapPage({
         <Stat icon={Check} label={`Hadir (${rate}%)`} value={hadir.length} />
         <Stat icon={Users} label="Estimasi tamu" value={totalTamu} />
       </div>
+
+      <Card className="mt-6">
+        <CardContent className="space-y-4 pt-6">
+          <h2 className="font-medium">Distribusi Kehadiran</h2>
+          <div className="flex h-3 w-full overflow-hidden rounded-full bg-muted">
+            {hadir.length > 0 && (
+              <div className="bg-emerald-500" style={{ width: `${pct(hadir.length)}%` }} />
+            )}
+            {ragu.length > 0 && (
+              <div className="bg-amber-500" style={{ width: `${pct(ragu.length)}%` }} />
+            )}
+            {tidak.length > 0 && (
+              <div className="bg-rose-500" style={{ width: `${pct(tidak.length)}%` }} />
+            )}
+          </div>
+          <div className="grid grid-cols-3 gap-2 text-sm">
+            <div className="flex items-center gap-1.5">
+              <span className="inline-block h-2.5 w-2.5 rounded-full bg-emerald-500" />
+              Hadir <b>{hadir.length}</b>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="inline-block h-2.5 w-2.5 rounded-full bg-amber-500" />
+              Ragu <b>{ragu.length}</b>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="inline-block h-2.5 w-2.5 rounded-full bg-rose-500" />
+              Tidak <b>{tidak.length}</b>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-2">
         <Card>

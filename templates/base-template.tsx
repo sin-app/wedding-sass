@@ -24,6 +24,7 @@ import type { InvitationData } from "@/lib/types";
 import type { Theme } from "@/templates/theme";
 import { TemplateFrame, FrameCard, OrnamentDivider, TitleOrnament, BackgroundFloat } from "@/templates/frames";
 import { defaultInvitationData } from "@/config/defaults";
+import { SharePanel } from "@/components/share/share-panel";
 
 function extractYouTubeId(url: string): string | null {
   const m = url.match(
@@ -241,6 +242,7 @@ export function BaseTemplate({
   const heroAnim = heroVariants[tSlug];
 
   const [opened, setOpened] = useState(preview);
+  const [shareUrl, setShareUrl] = useState("");
   const [playing, setPlaying] = useState(false);
   const [lightbox, setLightbox] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -264,6 +266,12 @@ export function BaseTemplate({
       document.body.style.overflow = "auto";
     };
   }, [opened, preview]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setShareUrl(`${window.location.origin}/i/${slug}`);
+    }
+  }, [slug]);
 
   const [rsvpState, rsvpAction] = useFormState<PublicActionResult | null, FormData>(
     submitRsvp ?? (async () => ({ ok: false, message: "" })),
@@ -816,6 +824,25 @@ export function BaseTemplate({
            <Heart className="mr-1 inline h-3 w-3" /> Pratinjau
          </div>
        )}
+      {!preview && shareUrl && (
+        <section className="px-4 py-10" style={{ background: theme.surface }}>
+          <div className="mx-auto max-w-md text-center">
+            <h3
+              className="mb-1 text-2xl md:text-3xl"
+              style={{ fontFamily: theme.useScript ? theme.fontScript : theme.fontHeading, color: theme.primary }}
+            >
+              Bagikan Undangan
+            </h3>
+            <p className="mb-5 text-sm text-muted-foreground">
+              Kirimkan tautan undangan ke tamu melalui WhatsApp atau pindai QR-nya.
+            </p>
+            <FrameCard slug={tSlug} theme={theme} className="p-5">
+              <SharePanel url={shareUrl} className="text-left" />
+            </FrameCard>
+          </div>
+        </section>
+      )}
+
       <BottomNav theme={theme} />
     </div>
   );
